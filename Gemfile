@@ -48,6 +48,7 @@ group :development, :test do
   gem "rspec-rails", "~> 6.1"
   gem "factory_bot_rails"
   gem "faker", "~> 3.4"
+  gem "shoulda-matchers", "~> 6.0"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
@@ -70,3 +71,6 @@ group :test do
   gem "selenium-webdriver"
 end
 gem "graphiql-rails", group: :development
+
+gem "core", path: "core"
+gem "admin", path: "admin"

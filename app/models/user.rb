@@ -7,9 +7,9 @@ class User < ApplicationRecord
   before_validation :normalize_email
 
   # Relations
-  has_many :projects, foreign_key: :user_id, dependent: :destroy, class_name: "Project"
-  has_many :assigned_tasks, as: :assignee, class_name: "Task", dependent: :nullify
-  has_many :activities, dependent: :destroy, class_name: "Activity"
+  has_many :projects, foreign_key: :user_id, dependent: :destroy, class_name: "Core::Project"
+  has_many :assigned_tasks, as: :assignee, class_name: "Core::Task", dependent: :nullify
+  has_many :activities, dependent: :destroy, class_name: "Core::Activity"
 
   private
 

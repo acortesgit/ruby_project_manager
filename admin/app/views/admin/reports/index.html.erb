@@ -1,0 +1,60 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Admin Reports</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Recent Projects</h2>
+      <div class="space-y-3">
+        <% @recent_projects.each do |project| %>
+          <div class="border-b pb-3">
+            <h3 class="font-semibold"><%= project.name %></h3>
+            <p class="text-sm text-gray-600"><%= project.description %></p>
+            <p class="text-xs text-gray-500"><%= project.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+          </div>
+        <% end %>
+        <% if @recent_projects.empty? %>
+          <p class="text-gray-500">No projects yet.</p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Recent Tasks</h2>
+      <div class="space-y-3">
+        <% @recent_tasks.each do |task| %>
+          <div class="border-b pb-3">
+            <h3 class="font-semibold"><%= task.title %></h3>
+            <p class="text-sm text-gray-600">Status: <span class="font-semibold"><%= task.status %></span></p>
+            <p class="text-xs text-gray-500"><%= task.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+          </div>
+        <% end %>
+        <% if @recent_tasks.empty? %>
+          <p class="text-gray-500">No tasks yet.</p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6 lg:col-span-2">
+      <h2 class="text-xl font-semibold mb-4">Recent Activities</h2>
+      <div class="space-y-3">
+        <% @recent_activities.each do |activity| %>
+          <div class="border-b pb-3">
+            <p class="text-sm">
+              <span class="font-semibold"><%= activity.action %></span>
+              on <span class="font-semibold"><%= activity.record_type %></span>#<%= activity.record_id %>
+              by User#<%= activity.user_id %>
+            </p>
+            <p class="text-xs text-gray-500"><%= activity.created_at.strftime("%Y-%m-%d %H:%M:%S") %></p>
+          </div>
+        <% end %>
+        <% if @recent_activities.empty? %>
+          <p class="text-gray-500">No activities yet.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <%= link_to "Back to Dashboard", admin.root_path, class: "bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+</div>

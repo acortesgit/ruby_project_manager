@@ -1,0 +1,29 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-gray-600 text-sm font-semibold uppercase mb-2">Projects</h2>
+      <p class="text-3xl font-bold text-gray-800"><%= @projects_count %></p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-gray-600 text-sm font-semibold uppercase mb-2">Tasks</h2>
+      <p class="text-3xl font-bold text-gray-800"><%= @tasks_count %></p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-gray-600 text-sm font-semibold uppercase mb-2">Users</h2>
+      <p class="text-3xl font-bold text-gray-800"><%= @users_count %></p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-gray-600 text-sm font-semibold uppercase mb-2">Activities</h2>
+      <p class="text-3xl font-bold text-gray-800"><%= @activities_count %></p>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <%= link_to "View Reports", admin.reports_path, class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+</div>

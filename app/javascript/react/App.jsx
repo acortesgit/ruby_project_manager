@@ -179,7 +179,10 @@ const App = () => {
       }
 
       await refetch();
-      setFeedback({ type: "success", message: "Account created and session started." });
+      // Redirect to Admin Dashboard after successful registration
+      setTimeout(() => {
+        window.location.replace("/admin");
+      }, 100);
     } catch (error) {
       console.error("Register error", error);
       setFeedback({ type: "error", message: "Unable to create the account. Please try again." });
@@ -201,7 +204,10 @@ const App = () => {
       }
 
       await refetch();
-      setFeedback({ type: "success", message: "Signed in successfully." });
+      // Redirect to Admin Dashboard after successful login
+      setTimeout(() => {
+        window.location.replace("/admin");
+      }, 100);
     } catch (error) {
       console.error("Login error", error);
       setFeedback({ type: "error", message: "Unable to sign in. Please try again." });
