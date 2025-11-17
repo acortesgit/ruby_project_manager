@@ -1,0 +1,19 @@
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+C:/Ruby34-x64/bin/ruby.exe extconf.rb
+creating Makefile
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-6zr19h sitelibdir\=./.gem.20251107-11944-6zr19h clean
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-6zr19h sitelibdir\=./.gem.20251107-11944-6zr19h
+generating websocket_mask-x64-mingw-ucrt.def
+compiling websocket_mask.c
+linking shared-object websocket_mask.so
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-6zr19h sitelibdir\=./.gem.20251107-11944-6zr19h install
+/usr/bin/install -c -m 0755 websocket_mask.so ./.gem.20251107-11944-6zr19h
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-6zr19h sitelibdir\=./.gem.20251107-11944-6zr19h clean

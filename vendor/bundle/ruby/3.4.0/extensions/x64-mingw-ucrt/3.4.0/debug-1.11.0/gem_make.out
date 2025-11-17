@@ -1,0 +1,20 @@
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/debug-1.11.0/ext/debug
+C:/Ruby34-x64/bin/ruby.exe extconf.rb
+creating Makefile
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/debug-1.11.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-d562qt sitelibdir\=./.gem.20251107-11944-d562qt clean
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/debug-1.11.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-d562qt sitelibdir\=./.gem.20251107-11944-d562qt
+generating debug-x64-mingw-ucrt.def
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/debug-1.11.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-d562qt sitelibdir\=./.gem.20251107-11944-d562qt install
+/usr/bin/install -c -m 0755 debug.so ./.gem.20251107-11944-d562qt/debug
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/debug-1.11.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-d562qt sitelibdir\=./.gem.20251107-11944-d562qt clean

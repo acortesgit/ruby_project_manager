@@ -1,0 +1,19 @@
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/cgi-0.5.0/ext/cgi/escape
+C:/Ruby34-x64/bin/ruby.exe extconf.rb
+creating Makefile
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/cgi-0.5.0/ext/cgi/escape
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-lnjio6 sitelibdir\=./.gem.20251107-11944-lnjio6 clean
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/cgi-0.5.0/ext/cgi/escape
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-lnjio6 sitelibdir\=./.gem.20251107-11944-lnjio6
+generating escape-x64-mingw-ucrt.def
+compiling escape.c
+linking shared-object cgi/escape.so
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/cgi-0.5.0/ext/cgi/escape
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-lnjio6 sitelibdir\=./.gem.20251107-11944-lnjio6 install
+/usr/bin/install -c -m 0755 escape.so ./.gem.20251107-11944-lnjio6/cgi
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/cgi-0.5.0/ext/cgi/escape
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-lnjio6 sitelibdir\=./.gem.20251107-11944-lnjio6 clean

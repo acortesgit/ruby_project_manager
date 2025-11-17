@@ -1,0 +1,19 @@
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+C:/Ruby34-x64/bin/ruby.exe extconf.rb
+creating Makefile
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-i5xnd3 sitelibdir\=./.gem.20251107-11944-i5xnd3 clean
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-i5xnd3 sitelibdir\=./.gem.20251107-11944-i5xnd3
+generating cparse-x64-mingw-ucrt.def
+compiling cparse.c
+linking shared-object racc/cparse.so
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-i5xnd3 sitelibdir\=./.gem.20251107-11944-i5xnd3 install
+/usr/bin/install -c -m 0755 cparse.so ./.gem.20251107-11944-i5xnd3/racc
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-i5xnd3 sitelibdir\=./.gem.20251107-11944-i5xnd3 clean

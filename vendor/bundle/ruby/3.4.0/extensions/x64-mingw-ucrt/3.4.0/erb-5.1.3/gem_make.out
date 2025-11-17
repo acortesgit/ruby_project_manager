@@ -1,0 +1,20 @@
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/erb-5.1.3/ext/erb/escape
+C:/Ruby34-x64/bin/ruby.exe extconf.rb
+checking for rb_ext_ractor_safe() in ruby.h... yes
+creating Makefile
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/erb-5.1.3/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-rs1rb7 sitelibdir\=./.gem.20251107-11944-rs1rb7 clean
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/erb-5.1.3/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-rs1rb7 sitelibdir\=./.gem.20251107-11944-rs1rb7
+generating escape-x64-mingw-ucrt.def
+compiling escape.c
+linking shared-object erb/escape.so
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/erb-5.1.3/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-rs1rb7 sitelibdir\=./.gem.20251107-11944-rs1rb7 install
+/usr/bin/install -c -m 0755 escape.so ./.gem.20251107-11944-rs1rb7/erb
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/erb-5.1.3/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-rs1rb7 sitelibdir\=./.gem.20251107-11944-rs1rb7 clean

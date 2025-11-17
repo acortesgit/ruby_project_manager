@@ -1,0 +1,19 @@
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/bindex-0.8.1/ext/skiptrace
+C:/Ruby34-x64/bin/ruby.exe extconf.rb
+creating Makefile
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-m7q5f6 sitelibdir\=./.gem.20251107-11944-m7q5f6 clean
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-m7q5f6 sitelibdir\=./.gem.20251107-11944-m7q5f6
+generating cruby-x64-mingw-ucrt.def
+compiling cruby.c
+linking shared-object skiptrace/internal/cruby.so
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-m7q5f6 sitelibdir\=./.gem.20251107-11944-m7q5f6 install
+/usr/bin/install -c -m 0755 cruby.so ./.gem.20251107-11944-m7q5f6/skiptrace/internal
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-m7q5f6 sitelibdir\=./.gem.20251107-11944-m7q5f6 clean

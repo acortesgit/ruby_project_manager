@@ -1,0 +1,18 @@
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/nio4r-2.7.5/ext/nio4r
+C:/Ruby34-x64/bin/ruby.exe extconf.rb
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/nio4r-2.7.5/ext/nio4r
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-4ppma6 sitelibdir\=./.gem.20251107-11944-4ppma6 clean
+make: *** No hay ninguna regla para construir el objetivo 'clean'.  Alto.
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/nio4r-2.7.5/ext/nio4r
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-4ppma6 sitelibdir\=./.gem.20251107-11944-4ppma6
+make: No se hace nada para 'all'.
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/nio4r-2.7.5/ext/nio4r
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-4ppma6 sitelibdir\=./.gem.20251107-11944-4ppma6 install
+make: No se hace nada para 'install'.
+
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/nio4r-2.7.5/ext/nio4r
+make DESTDIR\= sitearchdir\=./.gem.20251107-11944-4ppma6 sitelibdir\=./.gem.20251107-11944-4ppma6 clean
+make: *** No hay ninguna regla para construir el objetivo 'clean'.  Alto.

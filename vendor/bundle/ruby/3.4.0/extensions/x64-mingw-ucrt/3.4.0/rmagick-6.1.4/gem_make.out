@@ -1,0 +1,33 @@
+current directory: C:/training_app/vendor/bundle/ruby/3.4.0/gems/rmagick-6.1.4/ext/RMagick
+C:/Ruby34-x64/bin/ruby.exe extconf.rb
+checking for magick... no
+checking for identify... no
+*** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+Provided configuration options:
+	--with-opt-dir
+	--without-opt-dir
+	--with-opt-include=${opt-dir}/include
+	--without-opt-include
+	--with-opt-lib=${opt-dir}/lib
+	--without-opt-lib
+	--with-make-prog
+	--without-make-prog
+	--srcdir=.
+	--curdir
+	--ruby=C:/Ruby34-x64/bin/$(RUBY_BASE_NAME)
+extconf.rb:332:in 'RMagick::Extconf#magick_command': no executable found for ImageMagick (NotImplementedError)
+	from extconf.rb:245:in 'RMagick::Extconf#assert_has_dev_libs!'
+	from extconf.rb:227:in 'RMagick::Extconf#assert_can_compile!'
+	from extconf.rb:48:in 'RMagick::Extconf#initialize'
+	from extconf.rb:357:in 'Class#new'
+	from extconf.rb:357:in '<main>'
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  C:/training_app/vendor/bundle/ruby/3.4.0/extensions/x64-mingw-ucrt/3.4.0/rmagick-6.1.4/mkmf.log
+
+extconf failed, exit code 1
