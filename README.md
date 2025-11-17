@@ -1,42 +1,42 @@
 # DevHub - Developer Task & Project Management App
 
-Una aplicación Ruby on Rails de entrenamiento que simula un entorno de producción para gestión de proyectos y tareas.
+A Ruby on Rails training application that simulates a production environment for project and task management.
 
-## 📋 Descripción
+## 📋 Description
 
-DevHub es una aplicación Rails diseñada con dos propósitos principales:
-1. **Enseñar** a los ingenieros a aplicar la arquitectura e idiomas de Rails mediante código práctico
-2. **Entregar** una herramienta interna funcional para gestionar proyectos, tareas e historial de actividades
+DevHub is a Rails application designed with two main purposes:
+1. **Teach** engineers to apply Rails architecture and idioms through hands-on code
+2. **Deliver** a functional internal tool for managing projects, tasks, and activity history
 
-La aplicación está estructurada de manera similar a un ecosistema Rails modular del mundo real.
+The application is structured similar to a real-world modular Rails ecosystem.
 
-## 🎯 Objetivos del Proyecto
+## 🎯 Project Objectives
 
-- Demostrar competencias core de Rails (Models, Scopes, Service Objects, Engines)
-- Implementar una API GraphQL completa
-- Integrar background jobs con Sidekiq
-- Construir un cliente React con Redux y Apollo
-- Aplicar mejores prácticas de testing y arquitectura
+- Demonstrate core Rails competencies (Models, Scopes, Service Objects, Engines)
+- Implement a complete GraphQL API
+- Integrate background jobs with Sidekiq
+- Build a React client with Redux and Apollo
+- Apply testing and architecture best practices
 
-## 🏗️ Arquitectura
+## 🏗️ Architecture
 
 ```
 app/
-├── models/          # Modelos principales (User)
-├── graphql/         # API GraphQL (Types, Queries, Mutations)
+├── models/          # Main models (User)
+├── graphql/         # GraphQL API (Types, Queries, Mutations)
 ├── jobs/            # Background Jobs (ActivityLoggerJob)
 └── javascript/      # Frontend React + Apollo Client
 
-core/                # Core Engine (lógica de negocio principal)
+core/                # Core Engine (main business logic)
 ├── app/
 │   ├── models/core/         # Core::Project, Core::Task, Core::Activity
 │   └── services/core/       # Core::TaskStatusUpdater, Core::ProjectCreator, Core::TaskCreator
 └── lib/core/engine.rb
 
-admin/               # Admin Engine (panel de administración)
+admin/               # Admin Engine (administration panel)
 ├── app/
 │   ├── controllers/admin/   # Admin::DashboardController, Admin::ReportsController
-│   └── views/admin/         # Vistas del admin
+│   └── views/admin/         # Admin views
 └── lib/admin/engine.rb
 
 Frontend: React + Redux Toolkit + Apollo Client
@@ -60,180 +60,186 @@ Auth: Authlogic
 ### Frontend
 - **React**: 18
 - **Apollo Client**: 3.12
-- **Redux Toolkit**: (pendiente)
+- **Redux Toolkit**: 2.10
 - **Tailwind CSS**: 4.1
-- **esbuild**: Para bundling JavaScript
+- **esbuild**: For JavaScript bundling
 
 ### DevOps
-- **Docker**: Para desarrollo local
-- **Docker Compose**: Para servicios (PostgreSQL, Redis, Web)
+- **Docker**: For local development
+- **Docker Compose**: For services (PostgreSQL, Redis, Web)
 
 ### Testing & Quality
-- **RSpec**: Framework de testing
-- **Factory Bot**: Factories para tests
-- **rails_code_auditor**: Auditoría de código (Rubocop, Brakeman, SimpleCov)
+- **RSpec**: Testing framework
+- **Factory Bot**: Factories for tests
+- **shoulda-matchers**: Matchers for validations/associations
+- **rails_code_auditor**: Code auditing (Rubocop, Brakeman, SimpleCov)
 
-## ✅ Estado Actual
+## ✅ Current Status
 
-### Completado ✅
-- [x] Rails 7.2.3 setup básico
-- [x] PostgreSQL y Redis configurados
-- [x] Docker setup para desarrollo
-- [x] Authlogic configurado (User, UserSession)
-- [x] GraphQL API básica (solo autenticación)
-- [x] React + Apollo Client básico (solo autenticación)
-- [x] Sidekiq configurado
-- [x] **Modelos**: Core::Project, Core::Task, Core::Activity con migraciones y relaciones
-- [x] **ActiveRecord Scopes**: Implementados en todos los modelos
+### Completed ✅
+- [x] Rails 7.2.3 basic setup
+- [x] PostgreSQL and Redis configured
+- [x] Docker setup for development
+- [x] Authlogic configured (User, UserSession)
+- [x] Basic GraphQL API (authentication only)
+- [x] Basic React + Apollo Client (authentication only)
+- [x] Sidekiq configured
+- [x] **Models**: Core::Project, Core::Task, Core::Activity with migrations and relations
+- [x] **ActiveRecord Scopes**: Implemented in all models
 - [x] **Service Objects**: Core::TaskStatusUpdater, Core::ProjectCreator, Core::TaskCreator
-- [x] **Rails Engines**: Core Engine y Admin Engine montados
-- [x] **GraphQL API completa**: Types, Queries y Mutations para Projects/Tasks
-- [x] **ActivityLoggerJob**: Background job para registrar actividades asincrónicamente
-- [x] **Testing**: RSpec configurado con factories, model specs, service specs y job specs
-- [x] rails_code_auditor instalado
+- [x] **Rails Engines**: Core Engine and Admin Engine mounted
+- [x] **Complete GraphQL API**: Types, Queries and Mutations for Projects/Tasks
+- [x] **ActivityLoggerJob**: Background job to register activities asynchronously
+- [x] **Testing**: RSpec configured with factories, model specs, service specs and job specs
+- [x] **React Client**: Complete React client with Redux Toolkit for Projects/Tasks management
+- [x] rails_code_auditor installed
 
-### En Progreso ⏳
-- [ ] React Client completo (Projects/Tasks UI)
+### In Progress ⏳
+- [ ] Additional features and enhancements
 
-### Pendiente 📋
-- [ ] Redux Toolkit integration
+### Pending 📋
+- [ ] Production deployment setup
+- [ ] CI/CD pipeline
 
-## 🚀 Instalación y Setup
+## 🚀 Installation and Setup
 
-### Requisitos Previos
-- Docker y Docker Compose instalados
+### Prerequisites
+- Docker and Docker Compose installed
 - Git
 
-### Pasos de Instalación
+### Installation Steps
 
-1. **Clonar el repositorio**
+1. **Clone the repository**
    ```bash
    git clone <repository-url>
    cd training_app
    ```
 
-2. **Construir y levantar los servicios con Docker**
+2. **Build and start services with Docker**
    ```bash
    docker-compose -f docker-compose.dev.yml build
    docker-compose -f docker-compose.dev.yml up -d
    ```
 
-3. **Crear y migrar la base de datos**
+3. **Create and migrate the database**
    ```bash
    docker-compose -f docker-compose.dev.yml exec web bundle exec rails db:create
    docker-compose -f docker-compose.dev.yml exec web bundle exec rails db:migrate
    ```
 
-4. **Verificar que todo esté funcionando**
+4. **Verify everything is working**
    ```bash
    docker-compose -f docker-compose.dev.yml ps
    ```
 
-## 🎮 Uso
+## 🎮 Usage
 
-### Iniciar el servidor de desarrollo
+### Start the development server
 
-El servidor Rails debería iniciarse automáticamente con Docker Compose. Si no está corriendo:
+The Rails server should start automatically with Docker Compose. If it's not running:
 
 ```bash
 docker-compose -f docker-compose.dev.yml up web
 ```
 
-O si ya está corriendo en background:
+Or if it's already running in the background:
 
 ```bash
 docker-compose -f docker-compose.dev.yml start web
 ```
 
-### Acceder a la aplicación
+### Access the application
 
 - **Frontend**: http://localhost:3000
 - **GraphiQL (dev)**: http://localhost:3000/graphiql
 - **Sidekiq Web UI (dev)**: http://localhost:3000/sidekiq
 - **Admin Dashboard**: http://localhost:3000/admin
 - **Admin Reports**: http://localhost:3000/admin/reports
-- **Core Engine**: http://localhost:3000/api (montado pero sin rutas aún)
+- **Core Engine**: http://localhost:3000/api (mounted but no routes yet)
 
-### Comandos Docker Útiles
+### Useful Docker Commands
 
-Ver logs del servidor:
+View server logs:
 ```bash
 docker-compose -f docker-compose.dev.yml logs -f web
 ```
 
-Ejecutar comandos Rails:
+Run Rails commands:
 ```bash
 docker-compose -f docker-compose.dev.yml exec web bundle exec rails <command>
 ```
 
-Consola Rails:
+Rails console:
 ```bash
 docker-compose -f docker-compose.dev.yml exec web bundle exec rails console
 ```
 
-Ver estado de servicios:
+View service status:
 ```bash
 docker-compose -f docker-compose.dev.yml ps
 ```
 
-Detener servicios:
+Stop services:
 ```bash
 docker-compose -f docker-compose.dev.yml down
 ```
 
-### Compilar Assets Manualmente
+### Compile Assets Manually
 
-Si necesitas compilar assets JavaScript/CSS manualmente:
+If you need to compile JavaScript/CSS assets manually:
 
 ```bash
 docker-compose -f docker-compose.dev.yml exec web yarn build
 docker-compose -f docker-compose.dev.yml exec web yarn build:css
 ```
 
-## 📁 Estructura del Proyecto
+## 📁 Project Structure
 
 ```
 training_app/
 ├── app/
-│   ├── models/              # Modelos ActiveRecord principales
-│   │   └── user.rb          # Usuario (Authlogic)
+│   ├── models/              # Main ActiveRecord models
+│   │   └── user.rb          # User (Authlogic)
 │   ├── graphql/             # GraphQL API
 │   │   ├── types/           # GraphQL Types
 │   │   ├── mutations/       # Mutations
 │   │   └── training_app_schema.rb
 │   ├── jobs/                # Background Jobs
 │   │   ├── application_job.rb
-│   │   └── sample_job.rb
+│   │   └── activity_logger_job.rb
 │   └── javascript/          # Frontend React
 │       └── react/
 │           ├── App.jsx
-│           └── index.jsx
-├── core/                    # Core Engine (lógica de negocio)
+│           ├── index.jsx
+│           ├── components/  # React components
+│           ├── store/       # Redux store
+│           └── graphql/     # GraphQL queries/mutations
+├── core/                    # Core Engine (business logic)
 │   ├── app/
 │   │   ├── models/core/     # Core::Project, Core::Task, Core::Activity
 │   │   └── services/core/   # Core::TaskStatusUpdater, Core::ProjectCreator, Core::TaskCreator
 │   └── lib/core/engine.rb
-├── admin/                   # Admin Engine (panel de administración)
+├── admin/                   # Admin Engine (administration panel)
 │   ├── app/
 │   │   ├── controllers/admin/   # Admin::DashboardController, Admin::ReportsController
-│   │   └── views/admin/         # Vistas del admin
+│   │   └── views/admin/         # Admin views
 │   └── lib/admin/engine.rb
 ├── config/
-│   ├── database.yml         # Configuración PostgreSQL
-│   ├── routes.rb            # Rutas principales (monta engines)
-│   └── sidekiq.yml          # Configuración Sidekiq
+│   ├── database.yml         # PostgreSQL configuration
+│   ├── routes.rb            # Main routes (mounts engines)
+│   └── sidekiq.yml          # Sidekiq configuration
 ├── db/
-│   └── migrate/             # Migraciones (compartidas)
-├── docker-compose.dev.yml   # Docker Compose para desarrollo
-├── Dockerfile.dev           # Dockerfile para desarrollo
-└── README.md                # Este archivo
+│   └── migrate/             # Migrations (shared)
+├── docker-compose.dev.yml   # Docker Compose for development
+├── Dockerfile.dev           # Dockerfile for development
+└── README.md                # This file
 ```
 
-## 🔐 Autenticación
+## 🔐 Authentication
 
-La aplicación usa **Authlogic** para autenticación. Los usuarios se crean mediante GraphQL mutations:
+The application uses **Authlogic** for authentication. Users are created through GraphQL mutations:
 
-**Registro**:
+**Register**:
 ```graphql
 mutation {
   registerUser(
@@ -268,11 +274,11 @@ mutation {
 
 ## 🔌 GraphQL API
 
-La aplicación expone una API GraphQL completa en `/graphql`. Puedes explorarla en GraphiQL: http://localhost:3000/graphiql (solo en desarrollo)
+The application exposes a complete GraphQL API at `/graphql`. You can explore it in GraphiQL: http://localhost:3000/graphiql (development only)
 
-### Queries Disponibles
+### Available Queries
 
-**Obtener proyectos del usuario actual**:
+**Get current user's projects**:
 ```graphql
 query {
   projects {
@@ -289,7 +295,7 @@ query {
 }
 ```
 
-**Obtener un proyecto específico**:
+**Get a specific project**:
 ```graphql
 query {
   project(id: "1") {
@@ -305,7 +311,7 @@ query {
 }
 ```
 
-**Obtener tareas (con filtros opcionales)**:
+**Get tasks (with optional filters)**:
 ```graphql
 query {
   tasks(projectId: "1", status: IN_PROGRESS, assigneeId: "1") {
@@ -325,7 +331,7 @@ query {
 }
 ```
 
-**Obtener actividades**:
+**Get activities**:
 ```graphql
 query {
   activities(recordType: "Task", recordId: "1") {
@@ -341,12 +347,12 @@ query {
 }
 ```
 
-### Mutations Disponibles
+### Available Mutations
 
-**Crear proyecto**:
+**Create project**:
 ```graphql
 mutation {
-  createProject(name: "Mi Proyecto", description: "Descripción") {
+  createProject(name: "My Project", description: "Description") {
     project {
       id
       name
@@ -356,13 +362,13 @@ mutation {
 }
 ```
 
-**Crear tarea**:
+**Create task**:
 ```graphql
 mutation {
   createTask(
     projectId: "1"
-    title: "Nueva Tarea"
-    description: "Descripción"
+    title: "New Task"
+    description: "Description"
     assigneeId: "1"
   ) {
     task {
@@ -375,7 +381,7 @@ mutation {
 }
 ```
 
-**Actualizar status de tarea**:
+**Update task status**:
 ```graphql
 mutation {
   updateTaskStatus(id: "1", status: IN_PROGRESS) {
@@ -388,13 +394,13 @@ mutation {
 }
 ```
 
-**Actualizar tarea**:
+**Update task**:
 ```graphql
 mutation {
   updateTask(
     id: "1"
-    title: "Tarea Actualizada"
-    description: "Nueva descripción"
+    title: "Updated Task"
+    description: "New description"
     status: COMPLETED
   ) {
     task {
@@ -407,7 +413,7 @@ mutation {
 }
 ```
 
-**Eliminar proyecto**:
+**Delete project**:
 ```graphql
 mutation {
   deleteProject(id: "1") {
@@ -417,7 +423,7 @@ mutation {
 }
 ```
 
-**Eliminar tarea**:
+**Delete task**:
 ```graphql
 mutation {
   deleteTask(id: "1") {
@@ -427,9 +433,9 @@ mutation {
 }
 ```
 
-**Nota**: Todas las queries y mutations de Projects/Tasks requieren autenticación (usuario logueado).
+**Note**: All Projects/Tasks queries and mutations require authentication (logged-in user).
 
-## 📊 Modelos y Relaciones
+## 📊 Models and Relations
 
 ### User
 - `has_many :projects` (Core::Project, owner)
@@ -442,9 +448,9 @@ mutation {
 - `has_many :activities` (polymorphic, Core::Activity)
 
 **Scopes**:
-- `.by_user(user)` - Proyectos de un usuario
-- `.recent` - Ordenados por fecha
-- `.with_tasks` - Con tareas
+- `.by_user(user)` - Projects for a user
+- `.recent` - Ordered by date
+- `.with_tasks` - With tasks
 
 ### Core::Task
 - `belongs_to :project` (Core::Project)
@@ -453,10 +459,10 @@ mutation {
 - Enum: `status: { pending: 0, in_progress: 1, completed: 2 }`
 
 **Scopes**:
-- `.recent` - Ordenadas por fecha
-- `.assigned_to(assignee)` - Asignadas a un usuario
-- `.for_project(project)` - De un proyecto
-- `.pending`, `.in_progress`, `.completed` (del enum)
+- `.recent` - Ordered by date
+- `.assigned_to(assignee)` - Assigned to a user
+- `.for_project(project)` - From a project
+- `.pending`, `.in_progress`, `.completed` (from enum)
 
 ### Core::Activity
 - `belongs_to :record` (polymorphic)
@@ -464,17 +470,17 @@ mutation {
 - `metadata` (jsonb)
 
 **Scopes**:
-- `.by_record(record)` - De un registro específico
-- `.by_user(user)` - De un usuario
-- `.recent` - Ordenadas por fecha
-- `.by_action(action)` - Filtradas por acción
+- `.by_record(record)` - From a specific record
+- `.by_user(user)` - From a user
+- `.recent` - Ordered by date
+- `.by_action(action)` - Filtered by action
 
 ## 🔧 Service Objects (Core Engine)
 
-Todos los service objects están en el namespace `Core::`.
+All service objects are in the `Core::` namespace.
 
 ### Core::TaskStatusUpdater
-Actualiza el status de una tarea y registra la actividad.
+Updates a task's status and logs the activity.
 
 ```ruby
 result = Core::TaskStatusUpdater.call(
@@ -484,63 +490,63 @@ result = Core::TaskStatusUpdater.call(
 )
 
 if result.success?
-  # Éxito
+  # Success
 else
-  # result.errors contiene los errores
+  # result.errors contains the errors
 end
 ```
 
 ### Core::ProjectCreator
-Crea un nuevo proyecto con validaciones.
+Creates a new project with validations.
 
 ```ruby
 result = Core::ProjectCreator.call(
   user: current_user,
-  name: "Mi Proyecto",
-  description: "Descripción"
+  name: "My Project",
+  description: "Description"
 )
 ```
 
 ### Core::TaskCreator
-Crea una nueva tarea con validaciones.
+Creates a new task with validations.
 
 ```ruby
 result = Core::TaskCreator.call(
   project: project,
-  title: "Nueva Tarea",
-  description: "Descripción",
-  assignee: user  # Opcional
+  title: "New Task",
+  description: "Description",
+  assignee: user  # Optional
 )
 ```
 
 ## 🎛️ Rails Engines
 
 ### Core Engine (`/api`)
-Contiene la lógica de negocio principal:
-- Modelos: `Core::Project`, `Core::Task`, `Core::Activity`
+Contains the main business logic:
+- Models: `Core::Project`, `Core::Task`, `Core::Activity`
 - Services: `Core::TaskStatusUpdater`, `Core::ProjectCreator`, `Core::TaskCreator`
 
 ### Admin Engine (`/admin`)
-Panel de administración:
-- Dashboard: Estadísticas generales (proyectos, tareas, usuarios, actividades)
-- Reports: Reportes y actividades recientes
+Administration panel:
+- Dashboard: General statistics (projects, tasks, users, activities)
+- Reports: Reports and recent activities
 
 ## 🔄 Background Jobs
 
 ### ActivityLoggerJob
 
-El `ActivityLoggerJob` se encola automáticamente cuando:
-- Se crea un proyecto (via `Core::ProjectCreator`)
-- Se crea una tarea (via `Core::TaskCreator`)
-- Se actualiza el status de una tarea (via `Core::TaskStatusUpdater`)
-- Se actualiza un proyecto (via GraphQL mutation `updateProject`)
-- Se actualiza una tarea (via GraphQL mutation `updateTask`)
+The `ActivityLoggerJob` is automatically enqueued when:
+- A project is created (via `Core::ProjectCreator`)
+- A task is created (via `Core::TaskCreator`)
+- A task's status is updated (via `Core::TaskStatusUpdater`)
+- A project is updated (via GraphQL mutation `updateProject`)
+- A task is updated (via GraphQL mutation `updateTask`)
 
-**Verificar jobs en Sidekiq**:
-- Accede a http://localhost:3000/sidekiq (solo en desarrollo)
-- Verás la cola de jobs y su estado
+**Check jobs in Sidekiq**:
+- Access http://localhost:3000/sidekiq (development only)
+- You'll see the job queue and its status
 
-**Nota**: Para que los jobs se procesen, Sidekiq debe estar corriendo. Actualmente está comentado en `Procfile.dev` pero puedes iniciarlo manualmente:
+**Note**: For jobs to be processed, Sidekiq must be running. Currently it's commented out in `Procfile.dev` but you can start it manually:
 
 ```bash
 docker-compose -f docker-compose.dev.yml exec web bundle exec sidekiq -C config/sidekiq.yml
@@ -548,59 +554,59 @@ docker-compose -f docker-compose.dev.yml exec web bundle exec sidekiq -C config/
 
 ## 🧪 Testing
 
-### Configuración de Testing
+### Testing Configuration
 
-El proyecto usa **RSpec** para testing con **FactoryBot** para factories y **shoulda-matchers** para matchers de validaciones/asociaciones.
+The project uses **RSpec** for testing with **FactoryBot** for factories and **shoulda-matchers** for validation/association matchers.
 
 ### Factories
 
-- `spec/factories/users.rb` - Factory para User
-- `spec/factories/projects.rb` - Factory para Core::Project
-- `spec/factories/tasks.rb` - Factory para Core::Task
-- `spec/factories/activities.rb` - Factory para Core::Activity
+- `spec/factories/users.rb` - Factory for User
+- `spec/factories/projects.rb` - Factory for Core::Project
+- `spec/factories/tasks.rb` - Factory for Core::Task
+- `spec/factories/activities.rb` - Factory for Core::Activity
 
-### Specs Implementados
+### Implemented Specs
 
 **Model Specs**:
-- `spec/models/user_spec.rb` - Tests para User model
-- `spec/models/core/project_spec.rb` - Tests para Core::Project (validaciones, asociaciones, scopes)
-- `spec/models/core/task_spec.rb` - Tests para Core::Task (validaciones, asociaciones, enums, scopes)
-- `spec/models/core/activity_spec.rb` - Tests para Core::Activity (relaciones, scopes)
+- `spec/models/user_spec.rb` - Tests for User model
+- `spec/models/core/project_spec.rb` - Tests for Core::Project (validations, associations, scopes)
+- `spec/models/core/task_spec.rb` - Tests for Core::Task (validations, associations, enums, scopes)
+- `spec/models/core/activity_spec.rb` - Tests for Core::Activity (relations, scopes)
 
 **Service Specs**:
-- `spec/services/core/task_status_updater_spec.rb` - Tests para Core::TaskStatusUpdater
+- `spec/services/core/task_status_updater_spec.rb` - Tests for Core::TaskStatusUpdater
 
 **Job Specs**:
-- `spec/jobs/activity_logger_job_spec.rb` - Tests para ActivityLoggerJob
+- `spec/jobs/activity_logger_job_spec.rb` - Tests for ActivityLoggerJob
 
-### Ejecutar Tests
+### Run Tests
 
-Ejecutar todos los tests:
+Run all tests:
 ```bash
 docker-compose -f docker-compose.dev.yml exec web bundle exec rspec
 ```
 
-Ejecutar tests específicos:
+Run specific tests:
 ```bash
 docker-compose -f docker-compose.dev.yml exec web bundle exec rspec spec/models/
 docker-compose -f docker-compose.dev.yml exec web bundle exec rspec spec/services/
 docker-compose -f docker-compose.dev.yml exec web bundle exec rspec spec/jobs/
 ```
 
-Ejecutar con formato detallado:
+Run with detailed format:
 ```bash
 docker-compose -f docker-compose.dev.yml exec web bundle exec rspec --format documentation
 ```
 
-### Ejecutar Auditoría de Código
+### Run Code Audit
 
 ```bash
 docker-compose -f docker-compose.dev.yml exec web bundle exec rails_code_auditor
 ```
 
-## 📝 Variables de Entorno
+## 📝 Environment Variables
 
-Las variables de entorno se configuran en `docker-compose.dev.yml`:
+Environment variables are configured in `docker-compose.dev.yml`:
 
 - `RAILS_ENV`: development
 - `DB_HOST`: postgres-training
@@ -608,30 +614,30 @@ Las variables de entorno se configuran en `docker-compose.dev.yml`:
 - `DB_NAME`: training_app_development
 - `REDIS_URL`: redis://redis-training:6379/0
 
-## 🔄 Próximos Pasos
+## 🔄 Next Steps
 
-Según el plan de implementación (`IMPLEMENTATION_PLAN.md`):
+According to the implementation plan (`IMPLEMENTATION_PLAN.md`):
 
-1. **Rails Engines** (Core + Admin) - Fase 1.4
-2. **GraphQL API Completa** - Fase 2.1
-3. **ActivityLoggerJob** - Fase 2.2
-4. **Testing con RSpec** - Fase 2.3
-5. **React Client Completo** - Fase 2.4
+1. **Rails Engines** (Core + Admin) - Phase 1.4 ✅
+2. **Complete GraphQL API** - Phase 2.1 ✅
+3. **ActivityLoggerJob** - Phase 2.2 ✅
+4. **Testing with RSpec** - Phase 2.3 ✅
+5. **Complete React Client** - Phase 2.4 ✅
 
-## 📚 Documentación Adicional
+## 📚 Additional Documentation
 
-- `IMPLEMENTATION_PLAN.md` - Plan detallado de implementación
-- `DOCKER_COMMANDS.md` - Comandos Docker útiles
+- `IMPLEMENTATION_PLAN.md` - Detailed implementation plan
+- `DOCKER_COMMANDS.md` - Useful Docker commands
 
-## 🤝 Contribuir
+## 🤝 Contributing
 
-Este es un proyecto de entrenamiento. Consulta el plan de implementación para ver las tareas pendientes.
+This is a training project. Check the implementation plan for pending tasks.
 
-## 📄 Licencia
+## 📄 License
 
-[Especificar licencia si aplica]
+[Specify license if applicable]
 
 ---
 
-**Última actualización**: 2025-11-17  
-**Estado**: En desarrollo activo (Semana 1 - Fase 1.4 completada - Rails Engines implementados)
+**Last updated**: 2025-11-17  
+**Status**: Active development (Week 2 - Phase 2.4 completed - React Client with Redux implemented)

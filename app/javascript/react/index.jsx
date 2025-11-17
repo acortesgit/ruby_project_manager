@@ -1,6 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
+import { Provider } from "react-redux";
+import { store } from "./store";
 import App from "./App";
 
 const csrfToken = document.querySelector("meta[name='csrf-token']")?.getAttribute("content");
@@ -22,9 +24,11 @@ const mountReactApp = () => {
 
   const root = createRoot(rootElement);
   root.render(
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </Provider>
   );
 };
 

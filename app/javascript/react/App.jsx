@@ -1,5 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
+import { useDispatch, useSelector } from "react-redux";
+import { useMutation as useGraphQLMutation } from "@apollo/client";
+import { CREATE_PROJECT, UPDATE_PROJECT, CREATE_TASK, UPDATE_TASK } from "./graphql/mutations";
+import { addProjectSuccess, updateProjectSuccess, setCurrentProject, setLoading, setError, deleteProjectSuccess } from "./store/slices/projectsSlice";
+import { addTaskSuccess, updateTaskSuccess } from "./store/slices/tasksSlice";
+import ProjectsList from "./components/ProjectsList";
+import ProjectDetail from "./components/ProjectDetail";
+import ProjectForm from "./components/ProjectForm";
 
 const CURRENT_USER_QUERY = gql`
   query CurrentUser {
@@ -39,16 +47,6 @@ const LOGOUT_USER_MUTATION = gql`
   mutation LogoutUser {
     logoutUser {
       success
-    }
-  }
-`;
-
-const ENQUEUE_SAMPLE_JOB_MUTATION = gql`
-  mutation EnqueueSampleJob($message: String) {
-    enqueueSampleJob(message: $message) {
-      queued
-      jobId
-      errors
     }
   }
 `;
@@ -155,14 +153,22 @@ const App = () => {
   const { data, loading: currentUserLoading, refetch } = useQuery(CURRENT_USER_QUERY);
   const currentUser = data?.currentUser ?? null;
 
+  const dispatch = useDispatch();
+  const { currentProject, loading: projectsLoading } = useSelector((state) => state.projects);
+
   const [feedback, setFeedback] = useState(null);
+  const [view, setView] = useState("projects"); // "projects", "project-detail", "create-project", "edit-project"
+  const [editingProject, setEditingProject] = useState(null);
 
   const clearFeedback = () => setFeedback(null);
 
   const [registerUser, { loading: registering }] = useMutation(REGISTER_USER_MUTATION);
   const [loginUser, { loading: loggingIn }] = useMutation(LOGIN_USER_MUTATION);
   const [logoutUser, { loading: loggingOut }] = useMutation(LOGOUT_USER_MUTATION);
-  const [enqueueSampleJob, { loading: queuingJob }] = useMutation(ENQUEUE_SAMPLE_JOB_MUTATION);
+  const [createProjectMutation] = useGraphQLMutation(CREATE_PROJECT);
+  const [updateProjectMutation] = useGraphQLMutation(UPDATE_PROJECT);
+  const [createTaskMutation] = useGraphQLMutation(CREATE_TASK);
+  const [updateTaskMutation] = useGraphQLMutation(UPDATE_TASK);
 
   const handleRegister = async ({ email, password, passwordConfirmation }) => {
     clearFeedback();
@@ -179,10 +185,7 @@ const App = () => {
       }
 
       await refetch();
-      // Redirect to Admin Dashboard after successful registration
-      setTimeout(() => {
-        window.location.replace("/admin");
-      }, 100);
+      setFeedback({ type: "success", message: "Account created successfully!" });
     } catch (error) {
       console.error("Register error", error);
       setFeedback({ type: "error", message: "Unable to create the account. Please try again." });
@@ -204,10 +207,7 @@ const App = () => {
       }
 
       await refetch();
-      // Redirect to Admin Dashboard after successful login
-      setTimeout(() => {
-        window.location.replace("/admin");
-      }, 100);
+      setFeedback({ type: "success", message: "Signed in successfully!" });
     } catch (error) {
       console.error("Login error", error);
       setFeedback({ type: "error", message: "Unable to sign in. Please try again." });
@@ -220,6 +220,8 @@ const App = () => {
     try {
       await logoutUser();
       await refetch();
+      setView("projects");
+      dispatch(setCurrentProject(null));
       setFeedback({ type: "success", message: "Signed out." });
     } catch (error) {
       console.error("Logout error", error);
@@ -227,33 +229,113 @@ const App = () => {
     }
   };
 
-  const [jobMessage, setJobMessage] = useState("");
-
-  const handleEnqueueJob = async () => {
-    clearFeedback();
+  const handleCreateProject = async (formData) => {
     try {
-      const response = await enqueueSampleJob({
-        variables: { message: jobMessage || null }
+      dispatch(setLoading(true));
+      clearFeedback();
+      const { data } = await createProjectMutation({
+        variables: { name: formData.name, description: formData.description }
       });
 
-      const payload = response.data?.enqueueSampleJob;
-      if (!payload?.queued) {
-        setFeedback({
-          type: "error",
-          message: payload?.errors?.join(", ") || "Failed to queue job."
-        });
-        return;
+      if (data?.createProject?.project) {
+        dispatch(addProjectSuccess(data.createProject.project));
+        setView("projects");
+        setFeedback({ type: "success", message: "Project created successfully!" });
+      } else {
+        dispatch(setError(data?.createProject?.errors?.join(", ") || "Failed to create project"));
+        setFeedback({ type: "error", message: data?.createProject?.errors?.join(", ") || "Failed to create project" });
       }
-
-      setJobMessage("");
-      setFeedback({
-        type: "success",
-        message: `Job queued! Sidekiq ID: ${payload.jobId}`
-      });
     } catch (error) {
-      console.error("Enqueue job error", error);
-      setFeedback({ type: "error", message: "Unable to queue the job. Please try again." });
+      dispatch(setError(error.message));
+      setFeedback({ type: "error", message: error.message });
+    } finally {
+      dispatch(setLoading(false));
     }
+  };
+
+  const handleUpdateProject = async (formData) => {
+    try {
+      dispatch(setLoading(true));
+      clearFeedback();
+      const { data } = await updateProjectMutation({
+        variables: { id: editingProject.id, name: formData.name, description: formData.description }
+      });
+
+      if (data?.updateProject?.project) {
+        dispatch(updateProjectSuccess(data.updateProject.project));
+        setView("project-detail");
+        setEditingProject(null);
+        setFeedback({ type: "success", message: "Project updated successfully!" });
+      } else {
+        dispatch(setError(data?.updateProject?.errors?.join(", ") || "Failed to update project"));
+        setFeedback({ type: "error", message: data?.updateProject?.errors?.join(", ") || "Failed to update project" });
+      }
+    } catch (error) {
+      dispatch(setError(error.message));
+      setFeedback({ type: "error", message: error.message });
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  const handleCreateTask = async (projectId, formData, editingTask = null) => {
+    try {
+      dispatch(setLoading(true));
+      clearFeedback();
+
+      if (editingTask) {
+        const { data } = await updateTaskMutation({
+          variables: {
+            id: editingTask.id,
+            title: formData.title,
+            description: formData.description,
+            status: formData.status,
+            assigneeId: formData.assigneeId || null
+          }
+        });
+
+        if (data?.updateTask?.task) {
+          dispatch(updateTaskSuccess(data.updateTask.task));
+          setFeedback({ type: "success", message: "Task updated successfully!" });
+        } else {
+          dispatch(setError(data?.updateTask?.errors?.join(", ") || "Failed to update task"));
+          setFeedback({ type: "error", message: data?.updateTask?.errors?.join(", ") || "Failed to update task" });
+        }
+      } else {
+        const { data } = await createTaskMutation({
+          variables: {
+            projectId,
+            title: formData.title,
+            description: formData.description,
+            assigneeId: formData.assigneeId || null
+          }
+        });
+
+        if (data?.createTask?.task) {
+          dispatch(addTaskSuccess(data.createTask.task));
+          setFeedback({ type: "success", message: "Task created successfully!" });
+        } else {
+          dispatch(setError(data?.createTask?.errors?.join(", ") || "Failed to create task"));
+          setFeedback({ type: "error", message: data?.createTask?.errors?.join(", ") || "Failed to create task" });
+        }
+      }
+    } catch (error) {
+      dispatch(setError(error.message));
+      setFeedback({ type: "error", message: error.message });
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  const handleSelectProject = (project) => {
+    dispatch(setCurrentProject(project));
+    setView("project-detail");
+  };
+
+  const handleDeleteProject = (projectId) => {
+    dispatch(deleteProjectSuccess(projectId));
+    setView("projects");
+    setFeedback({ type: "success", message: "Project deleted successfully!" });
   };
 
   const userCard = useMemo(() => {
@@ -277,31 +359,21 @@ const App = () => {
     );
   }, [currentUser, currentUserLoading]);
 
-  return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="mx-auto max-w-4xl space-y-6">
-        <header className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-900">Training App</h1>
-          {currentUser && (
-            <button
-              type="button"
-              onClick={handleLogout}
-              disabled={loggingOut}
-              className="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-900 disabled:cursor-not-allowed disabled:bg-gray-500"
-            >
-              {loggingOut ? "Signing out…" : "Sign out"}
-            </button>
-          )}
-        </header>
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6">
+        <div className="mx-auto max-w-4xl space-y-6">
+          <header className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-gray-900">Training App</h1>
+          </header>
 
-        <Feedback feedback={feedback} />
+          <Feedback feedback={feedback} />
 
-        <section className="rounded-lg bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-xl font-semibold text-gray-800">Current session</h2>
-          {userCard}
-        </section>
+          <section className="rounded-lg bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-xl font-semibold text-gray-800">Current session</h2>
+            {userCard}
+          </section>
 
-        {!currentUser && (
           <div className="grid gap-6 md:grid-cols-2">
             <AuthForm
               title="Create account"
@@ -317,33 +389,81 @@ const App = () => {
               loading={loggingIn}
             />
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-gray-900">Training App</h1>
+          <button
+            type="button"
+            onClick={handleLogout}
+            disabled={loggingOut}
+            className="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-900 disabled:cursor-not-allowed disabled:bg-gray-500"
+          >
+            {loggingOut ? "Signing out…" : "Sign out"}
+          </button>
+        </header>
+
+        <Feedback feedback={feedback} />
+
+        {view === "projects" && (
+          <ProjectsList
+            onSelectProject={handleSelectProject}
+            onCreateProject={() => {
+              setEditingProject(null);
+              setView("create-project");
+            }}
+          />
         )}
 
-        {currentUser && (
-          <section className="rounded-lg bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold text-gray-800">Background work demo</h2>
-            <p className="mb-4 text-sm text-gray-600">
-              Queue a Sidekiq job through GraphQL. The job writes an entry to the Rails log including
-              the current user.
-            </p>
-            <div className="flex flex-col gap-3 md:flex-row md:items-center">
-              <input
-                type="text"
-                placeholder="Optional message"
-                value={jobMessage}
-                onChange={(event) => setJobMessage(event.target.value)}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 md:w-2/3"
-              />
-              <button
-                type="button"
-                onClick={handleEnqueueJob}
-                disabled={queuingJob}
-                className="rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-300 md:w-1/3"
-              >
-                {queuingJob ? "Queueing…" : "Queue Sidekiq job"}
-              </button>
-            </div>
-          </section>
+        {view === "create-project" && (
+          <div className="rounded-lg border border-gray-200 bg-white p-6">
+            <h2 className="mb-4 text-xl font-semibold text-gray-900">Create New Project</h2>
+            <ProjectForm
+              onSubmit={handleCreateProject}
+              onCancel={() => setView("projects")}
+              loading={projectsLoading}
+            />
+          </div>
+        )}
+
+        {view === "edit-project" && editingProject && (
+          <div className="rounded-lg border border-gray-200 bg-white p-6">
+            <h2 className="mb-4 text-xl font-semibold text-gray-900">Edit Project</h2>
+            <ProjectForm
+              project={editingProject}
+              onSubmit={handleUpdateProject}
+              onCancel={() => {
+                setView("project-detail");
+                setEditingProject(null);
+              }}
+              loading={projectsLoading}
+            />
+          </div>
+        )}
+
+        {view === "project-detail" && currentProject && (
+          <ProjectDetail
+            project={currentProject}
+            onBack={() => {
+              setView("projects");
+              dispatch(setCurrentProject(null));
+            }}
+            onCreateTask={handleCreateTask}
+            onEditTask={(task) => {
+              // This will be handled in ProjectDetail component
+            }}
+            onEditProject={(project) => {
+              setEditingProject(project);
+              setView("edit-project");
+            }}
+            onDeleteProject={handleDeleteProject}
+          />
         )}
       </div>
     </div>
@@ -351,4 +471,3 @@ const App = () => {
 };
 
 export default App;
-
