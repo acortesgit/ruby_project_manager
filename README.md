@@ -99,15 +99,27 @@ Auth: Authlogic
 
 ### Pending 📋
 - [ ] Production deployment setup
-- [ ] CI/CD pipeline
+- [x] CI/CD pipeline (Jenkinsfile created, GitHub Actions also available)
 
 ## 🚀 Installation and Setup
 
 ### Prerequisites
-- Docker and Docker Compose installed
-- Git
+
+Before starting, ensure you have the following installed:
+
+- **Docker** (version 20.10 or higher)
+- **Docker Compose** (version 2.0 or higher)
+- **Git** (for cloning the repository)
+
+**Optional** (for local development without Docker):
+- Ruby 3.3.7
+- PostgreSQL 15
+- Redis 7
+- Node.js 18+ and Yarn
 
 ### Installation Steps
+
+#### Option 1: Using Docker (Recommended)
 
 1. **Clone the repository**
    ```bash
@@ -127,9 +139,78 @@ Auth: Authlogic
    docker-compose -f docker-compose.dev.yml exec web bundle exec rails db:migrate
    ```
 
-4. **Verify everything is working**
+4. **Install JavaScript dependencies** (if not done automatically)
+   ```bash
+   docker-compose -f docker-compose.dev.yml exec web yarn install
+   ```
+
+5. **Verify everything is working**
    ```bash
    docker-compose -f docker-compose.dev.yml ps
+   ```
+
+   You should see all services running:
+   - `web` (Rails application)
+   - `postgres-training` (PostgreSQL database)
+   - `redis-training` (Redis cache/queue)
+
+#### Option 2: Local Development (Without Docker)
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd training_app
+   ```
+
+2. **Install Ruby dependencies**
+   ```bash
+   bundle install
+   ```
+
+3. **Install JavaScript dependencies**
+   ```bash
+   yarn install
+   ```
+
+4. **Setup database**
+   ```bash
+   # Configure database.yml with your PostgreSQL credentials
+   rails db:create
+   rails db:migrate
+   ```
+
+5. **Start Redis** (required for Sidekiq)
+   ```bash
+   redis-server
+   ```
+
+6. **Start the Rails server**
+   ```bash
+   bin/dev
+   # Or separately:
+   # rails server
+   # bin/rails sidekiq
+   ```
+
+### Post-Installation Verification
+
+1. **Check application is running**
+   - Open http://localhost:3000 in your browser
+   - You should see the application homepage
+
+2. **Verify GraphQL endpoint**
+   - Open http://localhost:3000/graphiql
+   - You should see the GraphiQL interface
+
+3. **Verify Sidekiq Web UI**
+   - Open http://localhost:3000/sidekiq
+   - You should see the Sidekiq dashboard
+
+4. **Run tests to verify setup**
+   ```bash
+   docker-compose -f docker-compose.dev.yml exec web bundle exec rspec
+   # Or locally:
+   bundle exec rspec
    ```
 
 ## 🎮 Usage
@@ -614,6 +695,35 @@ Environment variables are configured in `docker-compose.dev.yml`:
 - `DB_NAME`: training_app_development
 - `REDIS_URL`: redis://redis-training:6379/0
 
+## 🔄 CI/CD Pipeline
+
+The project includes CI/CD pipeline configurations for both Jenkins and GitHub Actions.
+
+### Jenkins Pipeline
+
+A `Jenkinsfile` is provided for Jenkins CI/CD. The pipeline includes:
+
+- **Security Scan**: Brakeman static analysis
+- **Lint**: RuboCop code style checking
+- **Tests**: RSpec test suite execution
+- **Code Audit**: Rails code auditor
+
+To use with Jenkins:
+1. Configure Jenkins to detect the `Jenkinsfile` in the repository
+2. Ensure Jenkins has access to PostgreSQL and Redis services
+3. Configure Ruby version manager (rbenv or rvm) on Jenkins agents
+
+### GitHub Actions
+
+GitHub Actions CI is configured in `.github/workflows/ci.yml` and runs automatically on:
+- Pull requests
+- Pushes to `main` branch
+
+The workflow includes:
+- Security scanning (Brakeman)
+- Code linting (RuboCop)
+- Test execution (RSpec)
+
 ## 🔄 Next Steps
 
 According to the implementation plan (`IMPLEMENTATION_PLAN.md`):
@@ -623,11 +733,16 @@ According to the implementation plan (`IMPLEMENTATION_PLAN.md`):
 3. **ActivityLoggerJob** - Phase 2.2 ✅
 4. **Testing with RSpec** - Phase 2.3 ✅
 5. **Complete React Client** - Phase 2.4 ✅
+6. **CI/CD Pipeline** - Jenkinsfile + GitHub Actions ✅
+7. **Documentation** - Architecture diagram + ERD ✅
 
 ## 📚 Additional Documentation
 
 - `IMPLEMENTATION_PLAN.md` - Detailed implementation plan
 - `DOCKER_COMMANDS.md` - Useful Docker commands
+- `ARCHITECTURE.md` - System architecture diagrams and component descriptions
+- `SCHEMA_ERD.md` - Database schema ERD and relationship documentation
+- `Jenkinsfile` - Jenkins CI/CD pipeline configuration
 
 ## 🤝 Contributing
 

@@ -428,9 +428,9 @@
 - [ ] React Client completo con Redux
 
 ### Infraestructura
-- [ ] Docker setup funcionando
-- [ ] CI Pipeline funcionando (tests, lint, brakeman)
-- [ ] Documentación actualizada (README.md)
+- [x] Docker setup funcionando
+- [x] CI Pipeline funcionando (Jenkinsfile + GitHub Actions)
+- [x] Documentación actualizada (README.md, ARCHITECTURE.md, SCHEMA_ERD.md)
 - [ ] rails_code_auditor ejecutándose sin errores críticos
 
 ---
