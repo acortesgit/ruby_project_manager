@@ -13,7 +13,7 @@ module Mutations
         return { user: nil, errors: ["Password confirmation doesn't match password"] }
       end
 
-      user = User.new(email: email)
+      user = User.new(email: email, user_type: :admin)
       user.password = password
 
       unless user.save

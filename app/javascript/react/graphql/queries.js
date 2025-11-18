@@ -101,3 +101,12 @@ export const ACTIVITIES_QUERY = gql`
   }
 `;
 
+export const USERS_QUERY = gql`
+  query Users {
+    users {
+      id
+      email
+    }
+  }
+`;
+

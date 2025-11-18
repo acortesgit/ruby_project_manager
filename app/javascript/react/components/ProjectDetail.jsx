@@ -225,11 +225,11 @@ const ProjectDetail = ({ project, onBack, onCreateTask, onEditTask, onEditProjec
         </div>
       )}
 
-      {tasks.length === 0 ? (
+      {tasks.length === 0 && !showTaskForm ? (
         <div className="rounded-lg border border-gray-700 bg-gray-800 p-8 text-center">
           <p className="text-gray-400">No tasks yet. Create your first task!</p>
         </div>
-      ) : (
+      ) : tasks.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2">
           {tasks.map((task) => (
             <TaskCard
@@ -242,7 +242,7 @@ const ProjectDetail = ({ project, onBack, onCreateTask, onEditTask, onEditProjec
             />
           ))}
         </div>
-      )}
+      ) : null}
       </div>
     </>
   );

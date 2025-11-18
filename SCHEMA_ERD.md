@@ -26,6 +26,7 @@ erDiagram
         datetime last_login_at
         string current_login_ip
         string last_login_ip
+        integer user_type "enum: 1=Admin, 2=Developer"
         datetime created_at
         datetime updated_at
     }
@@ -74,6 +75,7 @@ erDiagram
 - `persistence_token`: Token for session persistence
 - `login_count`, `failed_login_count`: Login statistics
 - `current_login_at`, `last_login_at`: Login timestamps
+- `user_type`: User type enum (1 = Admin, 2 = Developer, default: 1)
 
 **Relationships**:
 - `has_many :projects` (as owner)
@@ -183,6 +185,7 @@ erDiagram
 1. **users**:
    - `email` (unique index)
    - `persistence_token` (unique index)
+   - `user_type` (index for filtering by user type)
 
 2. **projects**:
    - `user_id` (for efficient user project queries)

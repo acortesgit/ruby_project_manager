@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from "react";
+import React, { useMemo, useState, useRef, useEffect } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation as useGraphQLMutation } from "@apollo/client";
@@ -151,7 +151,19 @@ const AuthForm = ({ title, includePasswordConfirmation = false, loading, onSubmi
   );
 };
 
-const Feedback = ({ feedback }) => {
+const Feedback = ({ feedback, onDismiss }) => {
+  useEffect(() => {
+    if (feedback && feedback.type === "success") {
+      const timer = setTimeout(() => {
+        if (onDismiss) {
+          onDismiss();
+        }
+      }, 5000); // Hide after 5 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [feedback, onDismiss]);
+
   if (!feedback) return null;
 
   const toneClasses =
@@ -216,8 +228,9 @@ const App = () => {
         return;
       }
 
-      await refetch();
-      setFeedback({ type: "success", message: "Account created successfully!" });
+      // After successful registration, switch to login view
+      setAuthView("login");
+      setFeedback({ type: "success", message: "Account created successfully! Please sign in to continue." });
     } catch (error) {
       console.error("Register error", error);
       setFeedback({ type: "error", message: "Unable to create the account. Please try again." });
@@ -398,7 +411,7 @@ const App = () => {
             </p>
           </header>
 
-          <Feedback feedback={feedback} />
+          <Feedback feedback={feedback} onDismiss={clearFeedback} />
 
           {authView === "login" ? (
             <div className="space-y-6">
@@ -452,7 +465,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-900 p-6">
       <div className="mx-auto max-w-6xl space-y-6">
-        <header className="flex items-center justify-between">
+        <header className="flex items-center justify-between pb-4 border-b border-gray-700">
           <h1 className="text-3xl font-bold text-white">DevHub</h1>
           <button
             type="button"
@@ -464,7 +477,7 @@ const App = () => {
           </button>
         </header>
 
-        <Feedback feedback={feedback} />
+        <Feedback feedback={feedback} onDismiss={clearFeedback} />
 
         {view === "projects" && (
           <ProjectsList
