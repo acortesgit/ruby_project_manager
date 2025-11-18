@@ -1,13 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useImperativeHandle, forwardRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
 import { PROJECTS_QUERY } from "../graphql/queries";
 import { fetchProjectsSuccess, setLoading, setError } from "../store/slices/projectsSlice";
 
-const ProjectsList = ({ onSelectProject, onCreateProject }) => {
+const ProjectsList = forwardRef(({ onSelectProject, onCreateProject }, ref) => {
   const dispatch = useDispatch();
   const { projects, loading } = useSelector((state) => state.projects);
-  const { data, loading: queryLoading, error, refetch } = useQuery(PROJECTS_QUERY);
+  const { data, loading: queryLoading, error, refetch } = useQuery(PROJECTS_QUERY, {
+    fetchPolicy: "cache-and-network" // Always fetch fresh data
+  });
+
+  // Expose refetch function to parent component
+  useImperativeHandle(ref, () => ({
+    refetch
+  }));
 
   useEffect(() => {
     if (queryLoading) {
@@ -26,7 +33,7 @@ const ProjectsList = ({ onSelectProject, onCreateProject }) => {
   if (loading) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-500">Loading projects...</p>
+        <p className="text-gray-400">Loading projects...</p>
       </div>
     );
   }
@@ -34,18 +41,18 @@ const ProjectsList = ({ onSelectProject, onCreateProject }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">My Projects</h2>
+        <h2 className="text-2xl font-bold text-white">My Projects</h2>
         <div className="flex gap-2">
           <button
             onClick={handleRefresh}
-            className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+            className="rounded-lg bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 transition-colors"
           >
             Refresh
           </button>
           {onCreateProject && (
             <button
               onClick={onCreateProject}
-              className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
             >
               New Project
             </button>
@@ -54,18 +61,18 @@ const ProjectsList = ({ onSelectProject, onCreateProject }) => {
       </div>
 
       {error && (
-        <div className="rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-          {error}
+        <div className="rounded-lg bg-red-900/30 border border-red-500/50 px-4 py-3 text-sm text-red-300">
+          {error.message || error}
         </div>
       )}
 
       {projects.length === 0 ? (
-        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center">
-          <p className="text-gray-500 mb-4">No projects yet. Create your first project!</p>
+        <div className="rounded-lg border border-gray-700 bg-gray-800 p-8 text-center">
+          <p className="text-gray-400 mb-4">No projects yet. Create your first project!</p>
           {onCreateProject && (
             <button
               onClick={onCreateProject}
-              className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
             >
               Create Project
             </button>
@@ -77,11 +84,11 @@ const ProjectsList = ({ onSelectProject, onCreateProject }) => {
             <div
               key={project.id}
               onClick={() => onSelectProject && onSelectProject(project)}
-              className="cursor-pointer rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md"
+              className="cursor-pointer rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-lg transition hover:shadow-xl hover:border-gray-600"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{project.name}</h3>
+              <h3 className="text-lg font-semibold text-white mb-2">{project.name}</h3>
               {project.description && (
-                <p className="text-sm text-gray-600 mb-3 line-clamp-2">{project.description}</p>
+                <p className="text-sm text-gray-400 mb-3 line-clamp-2">{project.description}</p>
               )}
               <div className="flex items-center justify-between text-xs text-gray-500">
                 <span>{project.tasks?.length || 0} tasks</span>
@@ -93,7 +100,9 @@ const ProjectsList = ({ onSelectProject, onCreateProject }) => {
       )}
     </div>
   );
-};
+});
+
+ProjectsList.displayName = "ProjectsList";
 
 export default ProjectsList;
 

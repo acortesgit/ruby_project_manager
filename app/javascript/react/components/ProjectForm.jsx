@@ -28,7 +28,7 @@ const ProjectForm = ({ project = null, onSubmit, onCancel, loading }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
           Project Name *
         </label>
         <input
@@ -38,12 +38,13 @@ const ProjectForm = ({ project = null, onSubmit, onCancel, loading }) => {
           required
           value={formData.name}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+          className="mt-1 block w-full rounded-lg border border-gray-600 bg-gray-700 px-4 py-2 text-white placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+          placeholder="Enter project name"
         />
       </div>
 
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-2">
           Description
         </label>
         <textarea
@@ -52,7 +53,8 @@ const ProjectForm = ({ project = null, onSubmit, onCancel, loading }) => {
           rows={3}
           value={formData.description}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+          className="mt-1 block w-full rounded-lg border border-gray-600 bg-gray-700 px-4 py-2 text-white placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+          placeholder="Enter project description"
         />
       </div>
 
@@ -60,7 +62,7 @@ const ProjectForm = ({ project = null, onSubmit, onCancel, loading }) => {
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-300"
+          className="inline-flex justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-400 disabled:opacity-50 transition-colors"
         >
           {loading ? "Saving..." : project ? "Update Project" : "Create Project"}
         </button>
@@ -69,7 +71,7 @@ const ProjectForm = ({ project = null, onSubmit, onCancel, loading }) => {
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="inline-flex justify-center rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-300 disabled:cursor-not-allowed disabled:bg-gray-100"
+            className="inline-flex justify-center rounded-lg bg-gray-700 px-4 py-2 text-sm font-medium text-gray-300 shadow-sm hover:bg-gray-600 disabled:cursor-not-allowed disabled:bg-gray-800 disabled:opacity-50 transition-colors"
           >
             Cancel
           </button>

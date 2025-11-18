@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation as useGraphQLMutation } from "@apollo/client";
 import { CREATE_PROJECT, UPDATE_PROJECT, CREATE_TASK, UPDATE_TASK } from "./graphql/mutations";
+import { PROJECTS_QUERY } from "./graphql/queries";
 import { addProjectSuccess, updateProjectSuccess, setCurrentProject, setLoading, setError, deleteProjectSuccess } from "./store/slices/projectsSlice";
 import { addTaskSuccess, updateTaskSuccess } from "./store/slices/tasksSlice";
 import ProjectsList from "./components/ProjectsList";
@@ -69,11 +70,14 @@ const AuthForm = ({ title, includePasswordConfirmation = false, loading, onSubmi
   };
 
   return (
-    <section className="rounded-lg bg-white p-6 shadow-sm">
-      <h2 className="mb-4 text-xl font-semibold text-gray-800">{title}</h2>
-      <form className="space-y-4" onSubmit={handleSubmit}>
+    <section className="max-w-md w-full mx-auto rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 p-8 shadow-2xl backdrop-blur-sm">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-white mb-1">{title}</h2>
+        <div className="h-1 w-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"></div>
+      </div>
+      <form className="space-y-5" onSubmit={handleSubmit}>
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor={`${title}-email`}>
+          <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor={`${title}-email`}>
             Email
           </label>
           <input
@@ -81,14 +85,15 @@ const AuthForm = ({ title, includePasswordConfirmation = false, loading, onSubmi
             name="email"
             type="email"
             required
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+            className="w-full rounded-xl border border-gray-600/50 bg-gray-800/50 backdrop-blur-sm px-4 py-3 text-white placeholder-gray-500 shadow-inner focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:bg-gray-800 transition-all duration-200"
+            placeholder="you@example.com"
             value={formState.email}
             onChange={handleChange}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor={`${title}-password`}>
+          <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor={`${title}-password`}>
             Password
           </label>
           <input
@@ -96,7 +101,8 @@ const AuthForm = ({ title, includePasswordConfirmation = false, loading, onSubmi
             name="password"
             type="password"
             required
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+            className="w-full rounded-xl border border-gray-600/50 bg-gray-800/50 backdrop-blur-sm px-4 py-3 text-white placeholder-gray-500 shadow-inner focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:bg-gray-800 transition-all duration-200"
+            placeholder="••••••••"
             value={formState.password}
             onChange={handleChange}
           />
@@ -105,7 +111,7 @@ const AuthForm = ({ title, includePasswordConfirmation = false, loading, onSubmi
         {includePasswordConfirmation && (
           <div>
             <label
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-300 mb-2"
               htmlFor={`${title}-passwordConfirmation`}
             >
               Confirm password
@@ -115,7 +121,8 @@ const AuthForm = ({ title, includePasswordConfirmation = false, loading, onSubmi
               name="passwordConfirmation"
               type="password"
               required
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+              className="w-full rounded-xl border border-gray-600/50 bg-gray-800/50 backdrop-blur-sm px-4 py-3 text-white placeholder-gray-500 shadow-inner focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:bg-gray-800 transition-all duration-200"
+              placeholder="••••••••"
               value={formState.passwordConfirmation}
               onChange={handleChange}
             />
@@ -125,9 +132,19 @@ const AuthForm = ({ title, includePasswordConfirmation = false, loading, onSubmi
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-300"
+          className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:from-indigo-500 hover:to-purple-500 hover:shadow-xl hover:shadow-indigo-500/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:from-indigo-600 disabled:hover:to-purple-600 transform hover:scale-[1.02] active:scale-[0.98]"
         >
-          {loading ? "Processing..." : submitLabel}
+          {loading ? (
+            <span className="flex items-center justify-center">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Processing...
+            </span>
+          ) : (
+            submitLabel
+          )}
         </button>
       </form>
     </section>
@@ -139,12 +156,23 @@ const Feedback = ({ feedback }) => {
 
   const toneClasses =
     feedback.type === "error"
-      ? "bg-red-50 border-red-200 text-red-700"
-      : "bg-green-50 border-green-200 text-green-700";
+      ? "bg-red-900/20 border-red-500/30 text-red-300 backdrop-blur-sm"
+      : "bg-green-900/20 border-green-500/30 text-green-300 backdrop-blur-sm";
 
   return (
-    <div className={`rounded-md border px-4 py-3 text-sm ${toneClasses}`}>
-      {feedback.message}
+    <div className={`rounded-xl border px-4 py-3 text-sm shadow-lg ${toneClasses} animate-in fade-in slide-in-from-top-2 duration-300`}>
+      <div className="flex items-center gap-2">
+        {feedback.type === "error" ? (
+          <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+          </svg>
+        ) : (
+          <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          </svg>
+        )}
+        <span>{feedback.message}</span>
+      </div>
     </div>
   );
 };
@@ -159,13 +187,17 @@ const App = () => {
   const [feedback, setFeedback] = useState(null);
   const [view, setView] = useState("projects"); // "projects", "project-detail", "create-project", "edit-project"
   const [editingProject, setEditingProject] = useState(null);
+  const [authView, setAuthView] = useState("login"); // "login" or "register"
+  const projectsListRef = useRef(null);
 
   const clearFeedback = () => setFeedback(null);
 
   const [registerUser, { loading: registering }] = useMutation(REGISTER_USER_MUTATION);
   const [loginUser, { loading: loggingIn }] = useMutation(LOGIN_USER_MUTATION);
   const [logoutUser, { loading: loggingOut }] = useMutation(LOGOUT_USER_MUTATION);
-  const [createProjectMutation] = useGraphQLMutation(CREATE_PROJECT);
+  const [createProjectMutation] = useGraphQLMutation(CREATE_PROJECT, {
+    refetchQueries: [{ query: PROJECTS_QUERY }]
+  });
   const [updateProjectMutation] = useGraphQLMutation(UPDATE_PROJECT);
   const [createTaskMutation] = useGraphQLMutation(CREATE_TASK);
   const [updateTaskMutation] = useGraphQLMutation(UPDATE_TASK);
@@ -332,78 +364,101 @@ const App = () => {
     setView("project-detail");
   };
 
-  const handleDeleteProject = (projectId) => {
+  // Auto-refresh projects list when view changes to projects
+  React.useEffect(() => {
+    if (view === "projects" && projectsListRef.current?.refetch) {
+      // Small delay to ensure component is mounted
+      const timer = setTimeout(() => {
+        projectsListRef.current.refetch();
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [view]);
+
+  const handleDeleteProject = async (projectId) => {
     dispatch(deleteProjectSuccess(projectId));
     setView("projects");
     setFeedback({ type: "success", message: "Project deleted successfully!" });
   };
 
-  const userCard = useMemo(() => {
-    if (currentUserLoading) {
-      return <p className="text-sm text-gray-500">Loading session…</p>;
-    }
-
-    if (!currentUser) {
-      return <p className="text-sm text-gray-500">No active session.</p>;
-    }
-
-    return (
-      <div className="space-y-2 text-sm text-gray-700">
-        <p>
-          <span className="font-medium">Email:</span> {currentUser.email}
-        </p>
-        <p>
-          <span className="font-medium">User ID:</span> {currentUser.id}
-        </p>
-      </div>
-    );
-  }, [currentUser, currentUserLoading]);
-
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-gray-100 p-6">
-        <div className="mx-auto max-w-4xl space-y-6">
-          <header className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-gray-900">Training App</h1>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-black flex items-center justify-center p-4 sm:p-6">
+        <div className="w-full max-w-md space-y-8">
+          <header className="text-center space-y-3">
+            <div className="inline-block">
+              <h1 className="text-5xl sm:text-6xl font-extrabold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                DevHub
+              </h1>
+            </div>
+            <p className="text-gray-400 text-base sm:text-lg">
+              {authView === "login" 
+                ? "Welcome back! Please sign in to continue." 
+                : "Create your account to get started."}
+            </p>
           </header>
 
           <Feedback feedback={feedback} />
 
-          <section className="rounded-lg bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold text-gray-800">Current session</h2>
-            {userCard}
-          </section>
-
-          <div className="grid gap-6 md:grid-cols-2">
-            <AuthForm
-              title="Create account"
-              submitLabel="Register"
-              onSubmit={handleRegister}
-              includePasswordConfirmation
-              loading={registering}
-            />
-            <AuthForm
-              title="Sign in"
-              submitLabel="Log in"
-              onSubmit={handleLogin}
-              loading={loggingIn}
-            />
-          </div>
+          {authView === "login" ? (
+            <div className="space-y-6">
+              <AuthForm
+                title="Sign in"
+                submitLabel="Log in"
+                onSubmit={handleLogin}
+                loading={loggingIn}
+              />
+              <div className="text-center">
+                <p className="text-gray-400 text-sm">
+                  Don't have an account?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setAuthView("register")}
+                    className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors underline decoration-2 underline-offset-2 decoration-indigo-500/50 hover:decoration-indigo-400"
+                  >
+                    Create one here
+                  </button>
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <AuthForm
+                title="Create account"
+                submitLabel="Register"
+                onSubmit={handleRegister}
+                includePasswordConfirmation
+                loading={registering}
+              />
+              <div className="text-center">
+                <p className="text-gray-400 text-sm">
+                  Already have an account?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setAuthView("login")}
+                    className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors underline decoration-2 underline-offset-2 decoration-indigo-500/50 hover:decoration-indigo-400"
+                  >
+                    Sign in here
+                  </button>
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-900 p-6">
       <div className="mx-auto max-w-6xl space-y-6">
         <header className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-900">Training App</h1>
+          <h1 className="text-3xl font-bold text-white">DevHub</h1>
           <button
             type="button"
             onClick={handleLogout}
             disabled={loggingOut}
-            className="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-900 disabled:cursor-not-allowed disabled:bg-gray-500"
+            className="rounded-lg bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-600 transition-colors"
           >
             {loggingOut ? "Signing out…" : "Sign out"}
           </button>
@@ -413,6 +468,7 @@ const App = () => {
 
         {view === "projects" && (
           <ProjectsList
+            ref={projectsListRef}
             onSelectProject={handleSelectProject}
             onCreateProject={() => {
               setEditingProject(null);
@@ -422,8 +478,8 @@ const App = () => {
         )}
 
         {view === "create-project" && (
-          <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h2 className="mb-4 text-xl font-semibold text-gray-900">Create New Project</h2>
+          <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
+            <h2 className="mb-4 text-xl font-semibold text-white">Create New Project</h2>
             <ProjectForm
               onSubmit={handleCreateProject}
               onCancel={() => setView("projects")}
@@ -433,8 +489,8 @@ const App = () => {
         )}
 
         {view === "edit-project" && editingProject && (
-          <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h2 className="mb-4 text-xl font-semibold text-gray-900">Edit Project</h2>
+          <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
+            <h2 className="mb-4 text-xl font-semibold text-white">Edit Project</h2>
             <ProjectForm
               project={editingProject}
               onSubmit={handleUpdateProject}

@@ -2,9 +2,9 @@ import React from "react";
 
 const TaskCard = ({ task, onStatusChange, onEdit, onDelete, loading }) => {
   const statusColors = {
-    pending: "bg-yellow-100 text-yellow-800",
-    in_progress: "bg-blue-100 text-blue-800",
-    completed: "bg-green-100 text-green-800"
+    pending: "bg-yellow-900/30 text-yellow-300 border-yellow-500/50",
+    in_progress: "bg-blue-900/30 text-blue-300 border-blue-500/50",
+    completed: "bg-green-900/30 text-green-300 border-green-500/50"
   };
 
   const statusOptions = [
@@ -14,16 +14,16 @@ const TaskCard = ({ task, onStatusChange, onEdit, onDelete, loading }) => {
   ];
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+    <div className="rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-lg">
       <div className="mb-2 flex items-start justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">{task.title}</h3>
-        <span className={`rounded-full px-2 py-1 text-xs font-medium ${statusColors[task.status] || statusColors.pending}`}>
+        <h3 className="text-lg font-semibold text-white">{task.title}</h3>
+        <span className={`rounded-full border px-2 py-1 text-xs font-medium ${statusColors[task.status] || statusColors.pending}`}>
           {task.status.replace("_", " ").toUpperCase()}
         </span>
       </div>
 
       {task.description && (
-        <p className="mb-3 text-sm text-gray-600">{task.description}</p>
+        <p className="mb-3 text-sm text-gray-400">{task.description}</p>
       )}
 
       <div className="mb-3 space-y-1 text-xs text-gray-500">
@@ -42,7 +42,7 @@ const TaskCard = ({ task, onStatusChange, onEdit, onDelete, loading }) => {
           value={task.status}
           onChange={(e) => onStatusChange(task.id, e.target.value)}
           disabled={loading}
-          className="rounded-md border border-gray-300 px-2 py-1 text-xs focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 disabled:cursor-not-allowed"
+          className="rounded-lg border border-gray-600 bg-gray-700 px-2 py-1 text-xs text-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:cursor-not-allowed transition-colors"
         >
           {statusOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -55,7 +55,7 @@ const TaskCard = ({ task, onStatusChange, onEdit, onDelete, loading }) => {
           <button
             onClick={() => onEdit(task)}
             disabled={loading}
-            className="rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-indigo-700 hover:bg-indigo-200 disabled:cursor-not-allowed"
+            className="rounded-lg bg-indigo-600/20 px-2 py-1 text-xs font-medium text-indigo-300 hover:bg-indigo-600/30 disabled:cursor-not-allowed transition-colors"
           >
             Edit
           </button>
@@ -65,7 +65,7 @@ const TaskCard = ({ task, onStatusChange, onEdit, onDelete, loading }) => {
           <button
             onClick={() => onDelete(task.id)}
             disabled={loading}
-            className="rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200 disabled:cursor-not-allowed"
+            className="rounded-lg bg-red-600/20 px-2 py-1 text-xs font-medium text-red-300 hover:bg-red-600/30 disabled:cursor-not-allowed transition-colors"
           >
             Delete
           </button>
