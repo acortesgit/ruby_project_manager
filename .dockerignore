@@ -23,3 +23,8 @@ RAILWAY_DEPLOY.md
 
 # IMPORTANT: Do NOT ignore core and admin engines - they are needed for bundle install
 # These directories must be included in the Docker build
+# But exclude their Gemfiles to avoid dependency conflicts
+core/Gemfile
+core/Gemfile.lock
+admin/Gemfile
+admin/Gemfile.lock
