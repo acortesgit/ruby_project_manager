@@ -22,10 +22,75 @@ const ProjectDetail = ({ project, onBack, onCreateTask, onEditTask, onEditProjec
     skip: !project
   });
 
-  const [deleteTaskMutation] = useMutation(DELETE_TASK);
-  const [updateTaskStatusMutation] = useMutation(UPDATE_TASK_STATUS);
+  const [deleteTaskMutation] = useMutation(DELETE_TASK, {
+    update: (cache, { data }, { variables }) => {
+      if (data?.deleteTask?.success && variables?.id) {
+        try {
+          const projectData = cache.readQuery({ 
+            query: PROJECT_QUERY, 
+            variables: { id: project.id } 
+          });
+          if (projectData?.project) {
+            cache.writeQuery({
+              query: PROJECT_QUERY,
+              variables: { id: project.id },
+              data: {
+                project: {
+                  ...projectData.project,
+                  tasks: projectData.project.tasks.filter(t => t.id !== variables.id)
+                }
+              }
+            });
+          }
+        } catch (e) {
+          // PROJECT_QUERY not in cache, that's ok
+        }
+      }
+    }
+  });
+  const [updateTaskStatusMutation] = useMutation(UPDATE_TASK_STATUS, {
+    update: (cache, { data }) => {
+      if (data?.updateTaskStatus?.task) {
+        const projectId = project.id;
+        try {
+          const projectData = cache.readQuery({ 
+            query: PROJECT_QUERY, 
+            variables: { id: projectId } 
+          });
+          if (projectData?.project) {
+            cache.writeQuery({
+              query: PROJECT_QUERY,
+              variables: { id: projectId },
+              data: {
+                project: {
+                  ...projectData.project,
+                  tasks: projectData.project.tasks.map(t => 
+                    t.id === data.updateTaskStatus.task.id ? data.updateTaskStatus.task : t
+                  )
+                }
+              }
+            });
+          }
+        } catch (e) {
+          // PROJECT_QUERY not in cache, that's ok
+        }
+      }
+    }
+  });
   const [deleteProjectMutation] = useMutation(DELETE_PROJECT, {
-    refetchQueries: [{ query: PROJECTS_QUERY }]
+    update: (cache, { data }) => {
+      if (data?.deleteProject?.success) {
+        const existingData = cache.readQuery({ query: PROJECTS_QUERY });
+        if (existingData) {
+          cache.writeQuery({
+            query: PROJECTS_QUERY,
+            data: {
+              projects: existingData.projects.filter(p => p.id !== project.id)
+            }
+          });
+        }
+      }
+    }
   });
 
   useEffect(() => {
@@ -46,7 +111,6 @@ const ProjectDetail = ({ project, onBack, onCreateTask, onEditTask, onEditProjec
       const { data } = await deleteTaskMutation({ variables: { id: taskToDelete } });
       if (data?.deleteTask?.success) {
         dispatch(deleteTaskSuccess(taskToDelete));
-        refetch();
       } else {
         dispatch(setError(data?.deleteTask?.errors?.join(", ") || "Failed to delete task"));
       }
@@ -61,12 +125,13 @@ const ProjectDetail = ({ project, onBack, onCreateTask, onEditTask, onEditProjec
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       dispatch(setLoading(true));
+      // Convert status to uppercase for GraphQL enum (pending -> PENDING, in_progress -> IN_PROGRESS, completed -> COMPLETED)
+      const statusUpper = newStatus.toUpperCase();
       const { data } = await updateTaskStatusMutation({
-        variables: { id: taskId, status: newStatus }
+        variables: { id: taskId, status: statusUpper }
       });
       if (data?.updateTaskStatus?.task) {
         dispatch(updateTaskSuccess(data.updateTaskStatus.task));
-        refetch();
       } else {
         dispatch(setError(data?.updateTaskStatus?.errors?.join(", ") || "Failed to update task status"));
       }
@@ -156,8 +221,8 @@ const ProjectDetail = ({ project, onBack, onCreateTask, onEditTask, onEditProjec
         variant="danger"
       />
 
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+    <div className="w-full space-y-6">
+      <div className="flex items-center justify-between">
         <div>
           <button
             onClick={onBack}
@@ -225,25 +290,29 @@ const ProjectDetail = ({ project, onBack, onCreateTask, onEditTask, onEditProjec
         </div>
       )}
 
-      {tasks.length === 0 && !showTaskForm ? (
-        <div className="rounded-lg border border-gray-700 bg-gray-800 p-8 text-center">
-          <p className="text-gray-400">No tasks yet. Create your first task!</p>
-        </div>
-      ) : tasks.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2">
-          {tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onStatusChange={handleStatusChange}
-              onEdit={handleEditTask}
-              onDelete={handleDeleteTask}
-              loading={projectLoading}
-            />
-          ))}
-        </div>
-      ) : null}
-      </div>
+      {!showTaskForm && (
+        <>
+          {tasks.length === 0 ? (
+            <div className="rounded-lg border border-gray-700 bg-gray-800 p-8 text-center">
+              <p className="text-gray-400">No tasks yet. Create your first task!</p>
+            </div>
+          ) : (
+            <div className="w-full grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {tasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onStatusChange={handleStatusChange}
+                  onEdit={handleEditTask}
+                  onDelete={handleDeleteTask}
+                  loading={projectLoading}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
     </>
   );
 };

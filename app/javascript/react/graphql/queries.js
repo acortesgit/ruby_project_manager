@@ -34,6 +34,7 @@ export const PROJECT_QUERY = gql`
         assignee {
           id
           email
+          fullName
         }
         createdAt
         updatedAt
@@ -56,6 +57,7 @@ export const TASKS_QUERY = gql`
       assignee {
         id
         email
+        fullName
       }
       createdAt
       updatedAt
@@ -77,6 +79,7 @@ export const TASK_QUERY = gql`
       assignee {
         id
         email
+        fullName
       }
       createdAt
       updatedAt
@@ -105,7 +108,10 @@ export const USERS_QUERY = gql`
   query Users {
     users {
       id
+      fullName
       email
+      userType
+      createdAt
     }
   }
 `;

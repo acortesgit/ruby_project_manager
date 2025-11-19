@@ -53,6 +53,7 @@ export const CREATE_TASK = gql`
         assignee {
           id
           email
+          fullName
         }
         createdAt
         updatedAt
@@ -77,6 +78,7 @@ export const UPDATE_TASK = gql`
         assignee {
           id
           email
+          fullName
         }
         updatedAt
       }
@@ -102,6 +104,46 @@ export const UPDATE_TASK_STATUS = gql`
 export const DELETE_TASK = gql`
   mutation DeleteTask($id: ID!) {
     deleteTask(id: $id) {
+      success
+      errors
+    }
+  }
+`;
+
+export const CREATE_USER = gql`
+  mutation CreateUser($fullName: String!, $email: String!, $userType: Int) {
+    createUser(fullName: $fullName, email: $email, userType: $userType) {
+      user {
+        id
+        fullName
+        email
+        userType
+        createdAt
+      }
+      errors
+    }
+  }
+`;
+
+export const UPDATE_USER = gql`
+  mutation UpdateUser($id: ID!, $fullName: String, $email: String, $userType: Int) {
+    updateUser(id: $id, fullName: $fullName, email: $email, userType: $userType) {
+      user {
+        id
+        fullName
+        email
+        userType
+        createdAt
+        updatedAt
+      }
+      errors
+    }
+  }
+`;
+
+export const DELETE_USER = gql`
+  mutation DeleteUser($id: ID!) {
+    deleteUser(id: $id) {
       success
       errors
     }

@@ -114,14 +114,14 @@ module Types
 
     # User queries
     field :users, [Types::UserType], null: false,
-      description: "List all users (for task assignment)"
+      description: "List all developer users (for task assignment)"
 
     def users
       current_user = context[:current_user]
       return [] unless current_user
 
-      # Return all users for now - in a real app, you might want to filter or limit this
-      User.all.order(:email)
+      # Return only developer users (user_type = 2)
+      User.where(user_type: :developer).order(:email)
     end
   end
 end

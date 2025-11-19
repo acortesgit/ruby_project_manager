@@ -7,18 +7,16 @@ const TaskCard = ({ task, onStatusChange, onEdit, onDelete, loading }) => {
     completed: "bg-green-900/30 text-green-300 border-green-500/50"
   };
 
-  const statusOptions = [
-    { value: "pending", label: "Pending" },
-    { value: "in_progress", label: "In Progress" },
-    { value: "completed", label: "Completed" }
-  ];
+  // Normalize status to lowercase for color lookup (GraphQL returns uppercase)
+  const normalizedStatus = task.status?.toLowerCase() || "pending";
+  const statusDisplay = task.status?.replace(/_/g, " ").toUpperCase() || "PENDING";
 
   return (
     <div className="rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-lg">
       <div className="mb-2 flex items-start justify-between">
         <h3 className="text-lg font-semibold text-white">{task.title}</h3>
-        <span className={`rounded-full border px-2 py-1 text-xs font-medium ${statusColors[task.status] || statusColors.pending}`}>
-          {task.status.replace("_", " ").toUpperCase()}
+        <span className={`rounded-full border px-2 py-1 text-xs font-medium ${statusColors[normalizedStatus] || statusColors.pending}`}>
+          {statusDisplay}
         </span>
       </div>
 
@@ -27,30 +25,15 @@ const TaskCard = ({ task, onStatusChange, onEdit, onDelete, loading }) => {
       )}
 
       <div className="mb-3 space-y-1 text-xs text-gray-500">
-        {task.assignee && (
-          <p>
-            <span className="font-medium">Assigned to:</span> {task.assignee.email}
-          </p>
-        )}
+        <p>
+          <span className="font-medium">Assigned to:</span> {task.assignee ? (task.assignee.fullName || task.assignee.email) : "Not assigned"}
+        </p>
         <p>
           <span className="font-medium">Created:</span> {new Date(task.createdAt).toLocaleDateString()}
         </p>
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <select
-          value={task.status}
-          onChange={(e) => onStatusChange(task.id, e.target.value)}
-          disabled={loading}
-          className="rounded-lg border border-gray-600 bg-gray-700 px-2 py-1 text-xs text-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:cursor-not-allowed transition-colors"
-        >
-          {statusOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-
         {onEdit && (
           <button
             onClick={() => onEdit(task)}

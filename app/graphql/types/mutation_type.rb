@@ -6,6 +6,9 @@ module Types
     field :register_user, mutation: Mutations::RegisterUser, description: "Create a new user and start a session"
     field :login_user, mutation: Mutations::LoginUser, description: "Authenticate an existing user"
     field :logout_user, mutation: Mutations::LogoutUser, description: "End the current session"
+    field :create_user, mutation: Mutations::CreateUser, description: "Create a new user (admin only, requires authentication)"
+    field :update_user, mutation: Mutations::UpdateUser, description: "Update an existing user (admin only, requires authentication)"
+    field :delete_user, mutation: Mutations::DeleteUser, description: "Delete a user (admin only, requires authentication)"
     field :enqueue_sample_job, mutation: Mutations::EnqueueSampleJob, description: "Queue a demo background job (requires authentication)"
 
     # Project mutations

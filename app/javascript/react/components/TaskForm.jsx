@@ -104,7 +104,7 @@ const TaskForm = ({ task = null, projectId, onSubmit, onCancel, loading }) => {
           <option value="">Select a user (optional)</option>
           {users.map((user) => (
             <option key={user.id} value={user.id}>
-              {user.email}
+              {user.fullName || user.email}
             </option>
           ))}
         </select>

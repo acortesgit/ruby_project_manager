@@ -2,13 +2,16 @@ import React, { useMemo, useState, useRef, useEffect } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation as useGraphQLMutation } from "@apollo/client";
-import { CREATE_PROJECT, UPDATE_PROJECT, CREATE_TASK, UPDATE_TASK } from "./graphql/mutations";
-import { PROJECTS_QUERY } from "./graphql/queries";
+import { CREATE_PROJECT, UPDATE_PROJECT, CREATE_TASK, UPDATE_TASK, CREATE_USER, UPDATE_USER, DELETE_USER } from "./graphql/mutations";
+import { PROJECTS_QUERY, PROJECT_QUERY, USERS_QUERY } from "./graphql/queries";
 import { addProjectSuccess, updateProjectSuccess, setCurrentProject, setLoading, setError, deleteProjectSuccess } from "./store/slices/projectsSlice";
 import { addTaskSuccess, updateTaskSuccess } from "./store/slices/tasksSlice";
 import ProjectsList from "./components/ProjectsList";
 import ProjectDetail from "./components/ProjectDetail";
 import ProjectForm from "./components/ProjectForm";
+import UsersList from "./components/UsersList";
+import UserForm from "./components/UserForm";
+import ConfirmModal from "./components/ConfirmModal";
 
 const CURRENT_USER_QUERY = gql`
   query CurrentUser {
@@ -153,12 +156,12 @@ const AuthForm = ({ title, includePasswordConfirmation = false, loading, onSubmi
 
 const Feedback = ({ feedback, onDismiss }) => {
   useEffect(() => {
-    if (feedback && feedback.type === "success") {
+    if (feedback) {
       const timer = setTimeout(() => {
         if (onDismiss) {
           onDismiss();
         }
-      }, 5000); // Hide after 5 seconds
+      }, feedback.type === "success" ? 3000 : 5000); // Success: 3s, Error: 5s
 
       return () => clearTimeout(timer);
     }
@@ -168,12 +171,31 @@ const Feedback = ({ feedback, onDismiss }) => {
 
   const toneClasses =
     feedback.type === "error"
-      ? "bg-red-900/20 border-red-500/30 text-red-300 backdrop-blur-sm"
-      : "bg-green-900/20 border-green-500/30 text-green-300 backdrop-blur-sm";
+      ? "bg-red-700 border-red-400 text-white"
+      : "bg-emerald-600 border-emerald-400 text-white";
+
+  const bgColor = feedback.type === "error" 
+    ? "rgba(185, 28, 28, 0.95)" // red-700 with opacity
+    : "rgba(5, 150, 105, 0.95)"; // emerald-600 with opacity
+  
+  const borderColor = feedback.type === "error"
+    ? "rgba(248, 113, 113, 0.8)" // red-400
+    : "rgba(52, 211, 153, 0.8)"; // emerald-400
 
   return (
-    <div className={`rounded-xl border px-4 py-3 text-sm shadow-lg ${toneClasses} animate-in fade-in slide-in-from-top-2 duration-300`}>
-      <div className="flex items-center gap-2">
+    <div 
+      className={`rounded-lg border-2 px-4 py-3 text-sm shadow-2xl text-white font-medium min-w-[300px] max-w-[500px] transform transition-all duration-300 ease-out backdrop-blur-sm`}
+      style={{
+        position: 'fixed',
+        bottom: '1rem',
+        right: '1rem',
+        zIndex: 99999,
+        backgroundColor: bgColor,
+        borderColor: borderColor,
+        animation: 'slideInUp 0.3s ease-out'
+      }}
+    >
+      <div className="flex items-center gap-3">
         {feedback.type === "error" ? (
           <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -183,7 +205,16 @@ const Feedback = ({ feedback, onDismiss }) => {
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
           </svg>
         )}
-        <span>{feedback.message}</span>
+        <span className="flex-1 font-medium">{feedback.message}</span>
+        <button
+          onClick={onDismiss}
+          className="ml-2 text-white/80 hover:text-white transition-colors rounded hover:bg-white/10 p-1"
+          aria-label="Close"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
     </div>
   );
@@ -197,8 +228,11 @@ const App = () => {
   const { currentProject, loading: projectsLoading } = useSelector((state) => state.projects);
 
   const [feedback, setFeedback] = useState(null);
-  const [view, setView] = useState("projects"); // "projects", "project-detail", "create-project", "edit-project"
+  const [view, setView] = useState("projects"); // "projects", "project-detail", "create-project", "edit-project", "users", "create-user", "edit-user"
+  const [section, setSection] = useState("projects"); // "projects" or "users"
   const [editingProject, setEditingProject] = useState(null);
+  const [editingUser, setEditingUser] = useState(null);
+  const [userToDelete, setUserToDelete] = useState(null);
   const [authView, setAuthView] = useState("login"); // "login" or "register"
   const projectsListRef = useRef(null);
 
@@ -208,11 +242,187 @@ const App = () => {
   const [loginUser, { loading: loggingIn }] = useMutation(LOGIN_USER_MUTATION);
   const [logoutUser, { loading: loggingOut }] = useMutation(LOGOUT_USER_MUTATION);
   const [createProjectMutation] = useGraphQLMutation(CREATE_PROJECT, {
-    refetchQueries: [{ query: PROJECTS_QUERY }]
+    update: (cache, { data }) => {
+      if (data?.createProject?.project) {
+        const existingData = cache.readQuery({ query: PROJECTS_QUERY });
+        if (existingData) {
+          cache.writeQuery({
+            query: PROJECTS_QUERY,
+            data: {
+              projects: [...existingData.projects, data.createProject.project]
+            }
+          });
+        }
+      }
+    }
   });
-  const [updateProjectMutation] = useGraphQLMutation(UPDATE_PROJECT);
-  const [createTaskMutation] = useGraphQLMutation(CREATE_TASK);
-  const [updateTaskMutation] = useGraphQLMutation(UPDATE_TASK);
+  const [updateProjectMutation] = useGraphQLMutation(UPDATE_PROJECT, {
+    update: (cache, { data }) => {
+      if (data?.updateProject?.project) {
+        const existingData = cache.readQuery({ query: PROJECTS_QUERY });
+        if (existingData) {
+          cache.writeQuery({
+            query: PROJECTS_QUERY,
+            data: {
+              projects: existingData.projects.map(p => 
+                p.id === data.updateProject.project.id ? data.updateProject.project : p
+              )
+            }
+          });
+        }
+        // Also update PROJECT_QUERY if it's in cache
+        try {
+          const projectData = cache.readQuery({ 
+            query: PROJECT_QUERY, 
+            variables: { id: data.updateProject.project.id } 
+          });
+          if (projectData) {
+            cache.writeQuery({
+              query: PROJECT_QUERY,
+              variables: { id: data.updateProject.project.id },
+              data: {
+                project: data.updateProject.project
+              }
+            });
+          }
+        } catch (e) {
+          // PROJECT_QUERY not in cache, that's ok
+        }
+      }
+    }
+  });
+  const [createTaskMutation] = useGraphQLMutation(CREATE_TASK, {
+    update: (cache, { data }) => {
+      if (data?.createTask?.task) {
+        const projectId = data.createTask.task.project.id;
+        const newTask = data.createTask.task;
+        
+        try {
+          const projectData = cache.readQuery({ 
+            query: PROJECT_QUERY, 
+            variables: { id: projectId } 
+          });
+          if (projectData?.project) {
+            // Check if task already exists to avoid duplicates
+            const taskExists = projectData.project.tasks?.some(t => t.id === newTask.id);
+            if (!taskExists) {
+              cache.writeQuery({
+                query: PROJECT_QUERY,
+                variables: { id: projectId },
+                data: {
+                  project: {
+                    ...projectData.project,
+                    tasks: [...(projectData.project.tasks || []), newTask]
+                  }
+                }
+              });
+            }
+          }
+        } catch (e) {
+          // PROJECT_QUERY not in cache, that's ok
+        }
+        
+        // Update PROJECTS_QUERY to update task count
+        try {
+          const existingData = cache.readQuery({ query: PROJECTS_QUERY });
+          if (existingData) {
+            const taskExists = existingData.projects
+              .find(p => p.id === projectId)?.tasks?.some(t => t.id === newTask.id);
+            if (!taskExists) {
+              cache.writeQuery({
+                query: PROJECTS_QUERY,
+                data: {
+                  projects: existingData.projects.map(p => 
+                    p.id === projectId 
+                      ? { ...p, tasks: [...(p.tasks || []), newTask] }
+                      : p
+                  )
+                }
+              });
+            }
+          }
+        } catch (e) {
+          // PROJECTS_QUERY not in cache, that's ok
+        }
+      }
+    }
+  });
+  const [updateTaskMutation] = useGraphQLMutation(UPDATE_TASK, {
+    update: (cache, { data }) => {
+      if (data?.updateTask?.task) {
+        const projectId = data.updateTask.task.project.id;
+        try {
+          const projectData = cache.readQuery({ 
+            query: PROJECT_QUERY, 
+            variables: { id: projectId } 
+          });
+          if (projectData?.project) {
+            cache.writeQuery({
+              query: PROJECT_QUERY,
+              variables: { id: projectId },
+              data: {
+                project: {
+                  ...projectData.project,
+                  tasks: projectData.project.tasks.map(t => 
+                    t.id === data.updateTask.task.id ? data.updateTask.task : t
+                  )
+                }
+              }
+            });
+          }
+        } catch (e) {
+          // PROJECT_QUERY not in cache, that's ok
+        }
+      }
+    }
+  });
+  const [createUserMutation] = useGraphQLMutation(CREATE_USER, {
+    update: (cache, { data }) => {
+      if (data?.createUser?.user) {
+        const existingData = cache.readQuery({ query: USERS_QUERY });
+        if (existingData) {
+          cache.writeQuery({
+            query: USERS_QUERY,
+            data: {
+              users: [...existingData.users, data.createUser.user]
+            }
+          });
+        }
+      }
+    }
+  });
+  const [updateUserMutation] = useGraphQLMutation(UPDATE_USER, {
+    update: (cache, { data }) => {
+      if (data?.updateUser?.user) {
+        const existingData = cache.readQuery({ query: USERS_QUERY });
+        if (existingData) {
+          cache.writeQuery({
+            query: USERS_QUERY,
+            data: {
+              users: existingData.users.map(u => 
+                u.id === data.updateUser.user.id ? data.updateUser.user : u
+              )
+            }
+          });
+        }
+      }
+    }
+  });
+  const [deleteUserMutation] = useGraphQLMutation(DELETE_USER, {
+    update: (cache, { data }, { variables }) => {
+      if (data?.deleteUser?.success && variables?.id) {
+        const existingData = cache.readQuery({ query: USERS_QUERY });
+        if (existingData) {
+          cache.writeQuery({
+            query: USERS_QUERY,
+            data: {
+              users: existingData.users.filter(u => u.id !== variables.id)
+            }
+          });
+        }
+      }
+    }
+  });
 
   const handleRegister = async ({ email, password, passwordConfirmation }) => {
     clearFeedback();
@@ -329,12 +539,14 @@ const App = () => {
       clearFeedback();
 
       if (editingTask) {
+        // Convert status to uppercase for GraphQL enum (pending -> PENDING, in_progress -> IN_PROGRESS, completed -> COMPLETED)
+        const statusUpper = formData.status.toUpperCase();
         const { data } = await updateTaskMutation({
           variables: {
             id: editingTask.id,
             title: formData.title,
             description: formData.description,
-            status: formData.status,
+            status: statusUpper,
             assigneeId: formData.assigneeId || null
           }
         });
@@ -357,7 +569,7 @@ const App = () => {
         });
 
         if (data?.createTask?.task) {
-          dispatch(addTaskSuccess(data.createTask.task));
+          // Don't dispatch to Redux - Apollo cache handles the update
           setFeedback({ type: "success", message: "Task created successfully!" });
         } else {
           dispatch(setError(data?.createTask?.errors?.join(", ") || "Failed to create task"));
@@ -392,6 +604,129 @@ const App = () => {
     dispatch(deleteProjectSuccess(projectId));
     setView("projects");
     setFeedback({ type: "success", message: "Project deleted successfully!" });
+  };
+
+  const handleCreateUser = async (formData) => {
+    try {
+      clearFeedback();
+      const { data, errors: graphqlErrors } = await createUserMutation({
+        variables: {
+          fullName: formData.full_name,
+          email: formData.email,
+          userType: formData.user_type
+        }
+      });
+
+      if (graphqlErrors && graphqlErrors.length > 0) {
+        const errorMessages = graphqlErrors.map(err => err.message).join(", ");
+        setFeedback({ type: "error", message: errorMessages });
+        console.error("GraphQL errors:", graphqlErrors);
+        return;
+      }
+
+      if (data?.createUser?.user) {
+        setView("users");
+        setFeedback({ type: "success", message: "User created successfully!" });
+      } else if (data?.createUser?.errors && data.createUser.errors.length > 0) {
+        setFeedback({ type: "error", message: data.createUser.errors.join(", ") });
+        console.error("Backend errors:", data.createUser.errors);
+      } else {
+        setFeedback({ type: "error", message: "Failed to create user. Please try again." });
+      }
+    } catch (error) {
+      console.error("Error creating user:", error);
+      setFeedback({ type: "error", message: error.message || "Unable to create user. Please try again." });
+    }
+  };
+
+  const handleEditUser = (user) => {
+    setEditingUser(user);
+    setView("edit-user");
+  };
+
+  const handleUpdateUser = async (formData) => {
+    if (!editingUser) return;
+
+    try {
+      clearFeedback();
+      const { data, errors: graphqlErrors } = await updateUserMutation({
+        variables: {
+          id: editingUser.id,
+          fullName: formData.full_name,
+          email: formData.email,
+          userType: formData.user_type
+        }
+      });
+
+      if (graphqlErrors && graphqlErrors.length > 0) {
+        const errorMessages = graphqlErrors.map(err => err.message).join(", ");
+        setFeedback({ type: "error", message: errorMessages });
+        console.error("GraphQL errors:", graphqlErrors);
+        return;
+      }
+
+      if (data?.updateUser?.user) {
+        setEditingUser(null);
+        setView("users");
+        setFeedback({ type: "success", message: "User updated successfully!" });
+      } else if (data?.updateUser?.errors && data.updateUser.errors.length > 0) {
+        setFeedback({ type: "error", message: data.updateUser.errors.join(", ") });
+        console.error("Backend errors:", data.updateUser.errors);
+      } else {
+        setFeedback({ type: "error", message: "Failed to update user. Please try again." });
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      setFeedback({ type: "error", message: error.message || "Unable to update user. Please try again." });
+    }
+  };
+
+  const handleDeleteUser = (userId) => {
+    setUserToDelete(userId);
+  };
+
+  const confirmDeleteUser = async () => {
+    if (!userToDelete) return;
+
+    try {
+      clearFeedback();
+      const { data, errors: graphqlErrors } = await deleteUserMutation({
+        variables: { id: userToDelete }
+      });
+
+      if (graphqlErrors && graphqlErrors.length > 0) {
+        const errorMessages = graphqlErrors.map(err => err.message).join(", ");
+        setFeedback({ type: "error", message: errorMessages });
+        console.error("GraphQL errors:", graphqlErrors);
+        setUserToDelete(null);
+        return;
+      }
+
+      if (data?.deleteUser?.success) {
+        setUserToDelete(null);
+        setFeedback({ type: "success", message: "User deleted successfully!" });
+      } else if (data?.deleteUser?.errors && data.deleteUser.errors.length > 0) {
+        setFeedback({ type: "error", message: data.deleteUser.errors.join(", ") });
+        console.error("Backend errors:", data.deleteUser.errors);
+        setUserToDelete(null);
+      } else {
+        setFeedback({ type: "error", message: "Failed to delete user. Please try again." });
+        setUserToDelete(null);
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      setFeedback({ type: "error", message: error.message || "Unable to delete user. Please try again." });
+      setUserToDelete(null);
+    }
+  };
+
+  const handleSectionChange = (newSection) => {
+    setSection(newSection);
+    if (newSection === "projects") {
+      setView("projects");
+    } else if (newSection === "users") {
+      setView("users");
+    }
   };
 
   if (!currentUser) {
@@ -462,22 +797,57 @@ const App = () => {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-900 p-6">
-      <div className="mx-auto max-w-6xl space-y-6">
-        <header className="flex items-center justify-between pb-4 border-b border-gray-700">
-          <h1 className="text-3xl font-bold text-white">DevHub</h1>
-          <button
-            type="button"
-            onClick={handleLogout}
-            disabled={loggingOut}
-            className="rounded-lg bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-600 transition-colors"
-          >
-            {loggingOut ? "Signing out…" : "Sign out"}
-          </button>
-        </header>
+  const sections = [
+    { id: "projects", label: "Projects", icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+    )},
+    { id: "users", label: "Users", icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+    )}
+  ];
 
-        <Feedback feedback={feedback} onDismiss={clearFeedback} />
+  return (
+    <div className="min-h-screen bg-gray-900">
+      <header className="w-full bg-gray-900 border-b border-gray-700">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 py-8 sm:py-10">
+            <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
+              <h1 className="text-3xl font-bold text-white">DevHub</h1>
+              <nav className="flex items-center gap-2 sm:gap-3">
+                {sections.map((sec) => (
+                  <button
+                    key={sec.id}
+                    onClick={() => handleSectionChange(sec.id)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                      section === sec.id
+                        ? "bg-indigo-600 text-white"
+                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                    }`}
+                  >
+                    {sec.icon}
+                    <span className="font-medium">{sec.label}</span>
+                  </button>
+                ))}
+              </nav>
+            </div>
+            <button
+              type="button"
+              onClick={handleLogout}
+              disabled={loggingOut}
+              className="rounded-lg bg-gray-800 px-6 py-3 text-base font-medium text-white hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-600 transition-colors whitespace-nowrap min-w-fit"
+            >
+              {loggingOut ? "Signing\u00A0out…" : "Sign\u00A0out"}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="w-full">
+        <div className="w-full p-6 px-8 space-y-6 max-w-6xl mx-auto">
 
         {view === "projects" && (
           <ProjectsList
@@ -491,7 +861,7 @@ const App = () => {
         )}
 
         {view === "create-project" && (
-          <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
+          <div className="w-full rounded-lg border border-gray-700 bg-gray-800 p-6">
             <h2 className="mb-4 text-xl font-semibold text-white">Create New Project</h2>
             <ProjectForm
               onSubmit={handleCreateProject}
@@ -502,7 +872,7 @@ const App = () => {
         )}
 
         {view === "edit-project" && editingProject && (
-          <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
+          <div className="w-full rounded-lg border border-gray-700 bg-gray-800 p-6">
             <h2 className="mb-4 text-xl font-semibold text-white">Edit Project</h2>
             <ProjectForm
               project={editingProject}
@@ -534,6 +904,52 @@ const App = () => {
             onDeleteProject={handleDeleteProject}
           />
         )}
+
+        {view === "users" && (
+          <UsersList
+            onCreateUser={() => setView("create-user")}
+            onEditUser={handleEditUser}
+            onDeleteUser={handleDeleteUser}
+          />
+        )}
+
+        {view === "create-user" && (
+          <div className="w-full rounded-lg border border-gray-700 bg-gray-800 p-6">
+            <h2 className="mb-4 text-xl font-semibold text-white">Create New User</h2>
+            <UserForm
+              onSubmit={handleCreateUser}
+              onCancel={() => setView("users")}
+              loading={false}
+            />
+          </div>
+        )}
+
+        {view === "edit-user" && editingUser && (
+          <div className="w-full rounded-lg border border-gray-700 bg-gray-800 p-6">
+            <h2 className="mb-4 text-xl font-semibold text-white">Edit User</h2>
+            <UserForm
+              onSubmit={handleUpdateUser}
+              onCancel={() => {
+                setEditingUser(null);
+                setView("users");
+              }}
+              loading={false}
+              initialUser={editingUser}
+            />
+          </div>
+        )}
+        </div>
+        <ConfirmModal
+          isOpen={!!userToDelete}
+          onClose={() => setUserToDelete(null)}
+          onConfirm={confirmDeleteUser}
+          title="Delete User"
+          message="Are you sure you want to delete this user? This action cannot be undone."
+          confirmText="Delete User"
+          cancelText="Cancel"
+          variant="danger"
+        />
+        <Feedback feedback={feedback} onDismiss={clearFeedback} />
       </div>
     </div>
   );

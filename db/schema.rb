@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_18_204919) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_19_002414) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_18_204919) do
     t.index ["status"], name: "index_tasks_on_status"
   end
 
+  create_table "user_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_user_types_on_name", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.string "crypted_password", null: false
@@ -68,6 +75,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_18_204919) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_type", default: 1, null: false
+    t.string "full_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["perishable_token"], name: "index_users_on_perishable_token"
     t.index ["persistence_token"], name: "index_users_on_persistence_token", unique: true
