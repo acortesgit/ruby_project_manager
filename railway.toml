@@ -3,8 +3,7 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-# Railway will use Procfile automatically for multiple processes
-# The Procfile defines: web (with migrations) and worker (Sidekiq)
+startCommand = "bundle exec puma -C config/puma.rb"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
