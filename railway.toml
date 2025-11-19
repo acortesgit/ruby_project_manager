@@ -3,9 +3,8 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-# Temporarily run migrations before starting the server
-# After migrations run successfully, change this back to: bundle exec puma -C config/puma.rb
-startCommand = "bundle exec rails db:prepare && bundle exec puma -C config/puma.rb"
+# Railway will use Procfile automatically for multiple processes
+# The Procfile defines: web (with migrations) and worker (Sidekiq)
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
