@@ -5,13 +5,4 @@ if [ -z "${LD_PRELOAD+x}" ] && [ -f /usr/lib/*/libjemalloc.so.2 ]; then
   export LD_PRELOAD="$(echo /usr/lib/*/libjemalloc.so.2)"
 fi
 
-# Temporarily disable automatic migrations to debug the crash issue
-# Migrations should be run manually or via a separate process
-# if [ "${RAILS_ENV}" == "production" ] && [ -n "${DATABASE_URL}" ]; then
-#   if [ "${1}" == "bundle" ] && [ "${2}" == "exec" ] && [ "${3}" == "puma" ]; then
-#     echo "Running database migrations..."
-#     RAILS_ENV=production bundle exec rails db:migrate 2>&1 || echo "Migrations completed or already up to date"
-#   fi
-# fi
-
 exec "${@}"
