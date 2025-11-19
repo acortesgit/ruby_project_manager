@@ -1,0 +1,17 @@
+[phases.setup]
+nixPkgs = ["nodejs-22_x", "yarn"]
+
+[phases.install]
+cmds = [
+  "bundle install",
+  "yarn install"
+]
+
+[phases.build]
+cmds = [
+  "rails assets:precompile"
+]
+
+[start]
+cmd = "bundle exec rails server -p $PORT"
+

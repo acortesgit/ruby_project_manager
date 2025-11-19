@@ -40,7 +40,10 @@ RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz
     rm -rf /tmp/node-build-master
 
 # Install application gems
+# Copy Gemfile first, then copy engines (core and admin) before bundle install
 COPY Gemfile Gemfile.lock ./
+COPY core ./core
+COPY admin ./admin
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
