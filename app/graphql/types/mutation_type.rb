@@ -21,5 +21,9 @@ module Types
     field :update_task, mutation: Mutations::UpdateTask, description: "Update an existing task (requires authentication)"
     field :delete_task, mutation: Mutations::DeleteTask, description: "Delete a task (requires authentication)"
     field :update_task_status, mutation: Mutations::UpdateTaskStatus, description: "Update task status using TaskStatusUpdater service (requires authentication)"
+
+    # Notification mutations
+    field :mark_notification_read, mutation: Mutations::MarkNotificationRead, description: "Mark a notification as read (requires authentication)"
+    field :mark_all_notifications_read, mutation: Mutations::MarkAllNotificationsRead, description: "Mark all notifications as read for the current user (requires authentication)"
   end
 end

@@ -31,9 +31,14 @@ module Mutations
       attributes[:description] = description if description.present?
       attributes[:status] = status if status.present?
 
+      # Track if assignee is changing
+      old_assignee = task.assignee
+      assignee_changed = false
+
       if assignee_id.present?
         assignee = User.find_by(id: assignee_id)
         if assignee
+          assignee_changed = (old_assignee != assignee)
           attributes[:assignee] = assignee
         end
       end
@@ -47,6 +52,26 @@ module Mutations
           user_id: current_user.id,
           metadata: {}
         )
+
+        # Notify new assignee if task was assigned
+        if assignee_changed && task.assignee
+          NotificationJob.perform_later(
+            user_id: task.assignee.id,
+            notification_type: "task_assigned",
+            message: "You've been assigned to task: #{task.title} in project #{task.project.name}",
+            notifiable: task
+          )
+        end
+
+        # Notify if task status changed to completed
+        if status == "completed" && task.assignee && task.assignee.id != current_user.id
+          NotificationJob.perform_later(
+            user_id: task.assignee.id,
+            notification_type: "task_completed",
+            message: "Task '#{task.title}' has been marked as completed",
+            notifiable: task
+          )
+        end
 
         { task: task, errors: [] }
       else

@@ -116,3 +116,35 @@ export const USERS_QUERY = gql`
   }
 `;
 
+export const NOTIFICATIONS_QUERY = gql`
+  query Notifications($unreadOnly: Boolean) {
+    notifications(unreadOnly: $unreadOnly) {
+      id
+      notificationType
+      message
+      read
+      createdAt
+      notifiable {
+        ... on Task {
+          id
+          title
+          project {
+            id
+            name
+          }
+        }
+        ... on Project {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const UNREAD_NOTIFICATIONS_COUNT_QUERY = gql`
+  query UnreadNotificationsCount {
+    unreadNotificationsCount
+  }
+`;
+

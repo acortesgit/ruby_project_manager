@@ -1,5 +1,6 @@
 module Types
   class ProjectType < Types::BaseObject
+    implements Types::NodeType
     description "A project containing multiple tasks"
 
     field :id, ID, null: false

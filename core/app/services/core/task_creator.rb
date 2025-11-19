@@ -37,6 +37,16 @@ module Core
           metadata: { assignee_id: assignee&.id, assignee_type: assignee&.class&.name }
         )
 
+        # Notify assignee if task is assigned
+        if assignee
+          NotificationJob.perform_later(
+            user_id: assignee.id,
+            notification_type: "task_assigned",
+            message: "You've been assigned to task: #{task.title} in project #{project.name}",
+            notifiable: task
+          )
+        end
+
         success(task)
       else
         failure(task.errors.full_messages, task)

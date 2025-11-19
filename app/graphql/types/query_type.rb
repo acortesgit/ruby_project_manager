@@ -123,5 +123,46 @@ module Types
       # Return only developer users (user_type = 2)
       User.where(user_type: :developer).order(:email)
     end
+
+    # Notification queries
+    field :notifications, [Types::NotificationType], null: false,
+      description: "List notifications for the current user" do
+      argument :unread_only, Boolean, required: false, description: "Return only unread notifications"
+    end
+
+    def notifications(unread_only: false)
+      current_user = context[:current_user]
+      return [] unless current_user
+
+      notifications = Notification.for_user(current_user)
+      notifications = notifications.unread if unread_only
+      notifications.recent
+    end
+
+    field :notification, Types::NotificationType, null: true,
+      description: "Get a specific notification by ID" do
+      argument :id, ID, required: true, description: "Notification ID"
+    end
+
+    def notification(id:)
+      current_user = context[:current_user]
+      return nil unless current_user
+
+      notification = Notification.find_by(id: id)
+      return nil unless notification
+      return nil unless notification.user_id == current_user.id
+
+      notification
+    end
+
+    field :unread_notifications_count, Integer, null: false,
+      description: "Count of unread notifications for the current user"
+
+    def unread_notifications_count
+      current_user = context[:current_user]
+      return 0 unless current_user
+
+      Notification.for_user(current_user).unread.count
+    end
   end
 end

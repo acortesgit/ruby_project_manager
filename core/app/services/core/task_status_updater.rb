@@ -35,6 +35,26 @@ module Core
           metadata: { old_status: old_status, new_status: new_status }
         )
 
+        # Notify assignee if task is completed
+        if new_status == "completed" && task.assignee
+          NotificationJob.perform_later(
+            user_id: task.assignee.id,
+            notification_type: "task_completed",
+            message: "Task '#{task.title}' has been marked as completed",
+            notifiable: task
+          )
+        end
+
+        # Notify project owner if task is completed
+        if new_status == "completed" && task.project.user_id != user.id
+          NotificationJob.perform_later(
+            user_id: task.project.user_id,
+            notification_type: "task_completed",
+            message: "Task '#{task.title}' in project '#{task.project.name}' has been completed",
+            notifiable: task
+          )
+        end
+
         success(task)
       else
         failure(task.errors.full_messages, task)

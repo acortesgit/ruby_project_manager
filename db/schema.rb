@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_19_002414) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_20_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_19_002414) do
     t.index ["created_at"], name: "index_activities_on_created_at"
     t.index ["record_type", "record_id"], name: "index_activities_on_record_type_and_record_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "notification_type", null: false
+    t.text "message", null: false
+    t.boolean "read", default: false, null: false
+    t.string "notifiable_type"
+    t.bigint "notifiable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable"
+    t.index ["read"], name: "index_notifications_on_read"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -84,6 +98,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_19_002414) do
   end
 
   add_foreign_key "activities", "users"
+  add_foreign_key "notifications", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "tasks", "projects"
 end

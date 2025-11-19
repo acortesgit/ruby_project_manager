@@ -1,5 +1,6 @@
 module Types
   class TaskType < Types::BaseObject
+    implements Types::NodeType
     description "A task within a project"
 
     field :id, ID, null: false
