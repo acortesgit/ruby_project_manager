@@ -20,6 +20,10 @@ Rails.application.configure do
   # key such as config/credentials/production.key. This key is used to decrypt credentials (and other encrypted files).
   # config.require_master_key = true
 
+  # Use SECRET_KEY_BASE from environment variable (Railway provides this)
+  # If SECRET_KEY_BASE is not set, Rails will try to read it from credentials
+  config.secret_key_base = ENV["SECRET_KEY_BASE"] || Rails.application.credentials.secret_key_base
+
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
   # config.public_file_server.enabled = false
 

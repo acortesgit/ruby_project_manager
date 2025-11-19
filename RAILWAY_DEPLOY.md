@@ -49,8 +49,10 @@ RAILS_MASTER_KEY=<tu_master_key_si_usas_credentials>
 ```
 
 **⚠️ IMPORTANTE:** 
-- Genera un nuevo `SECRET_KEY_BASE` para producción (el de arriba es solo un ejemplo)
+- **DEBES** generar un nuevo `SECRET_KEY_BASE` para producción (el de arriba es solo un ejemplo)
 - No uses el mismo SECRET_KEY_BASE de desarrollo
+- **Este es un paso CRÍTICO** - sin esto la aplicación no iniciará
+- Para generar uno nuevo, ejecuta: `rails secret` (en tu máquina local o en Railway console)
 
 #### Variables Automáticas (Railway las crea automáticamente):
 - `DATABASE_URL` - Se conecta automáticamente al servicio PostgreSQL

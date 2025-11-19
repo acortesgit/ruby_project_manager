@@ -1,0 +1,114 @@
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:229:in 'TSort.tsort_each'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.826196959Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/rack-3.2.4/lib/rack/builder.rb:67:in 'Rack::Builder.parse_file'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.826198422Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:208:in 'TSort#tsort_each'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.826207559Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/initializable.rb:60:in 'Rails::Initializable#run_initializers'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.826215907Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/application.rb:435:in 'Rails::Application#initialize!'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.826223131Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/configuration.rb:414:in 'Puma::Configuration#load_rackup'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828429966Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/configuration.rb:318:in 'Puma::Configuration#app'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828444864Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/runner.rb:160:in 'Puma::Runner#load_and_bind'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828455917Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/single.rb:44:in 'Puma::Single#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828464343Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/launcher.rb:207:in 'Puma::Launcher#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828474134Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/cli.rb:73:in 'Puma::CLI#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828483152Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/bin/puma:10:in '<top (required)>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828491151Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/bin/puma:25:in 'Kernel#load'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828498203Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/bin/puma:25:in '<top (required)>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828505562Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli/exec.rb:59:in 'Kernel.load'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828540123Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli/exec.rb:59:in 'Bundler::CLI::Exec#kernel_load'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828549925Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli/exec.rb:23:in 'Bundler::CLI::Exec#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828558307Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli.rb:452:in 'Bundler::CLI#exec'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828565519Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/command.rb:28:in 'Bundler::Thor::Command#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828572707Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/invocation.rb:127:in 'Bundler::Thor::Invocation#invoke_command'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828580612Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor.rb:538:in 'Bundler::Thor.dispatch'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.828588222Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli.rb:35:in 'Bundler::CLI.dispatch'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.831316041Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/base.rb:584:in 'Bundler::Thor::Base::ClassMethods#start'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.831326151Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli.rb:29:in 'Bundler::CLI.start'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.831332945Z"}
+{"message":"\tfrom /usr/local/lib/ruby/gems/3.4.0/gems/bundler-2.6.9/exe/bundle:28:in 'block in <top (required)>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.831339627Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/friendly_errors.rb:117:in 'Bundler.with_friendly_errors'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.831346364Z"}
+{"message":"\tfrom /usr/local/lib/ruby/gems/3.4.0/gems/bundler-2.6.9/exe/bundle:20:in '<top (required)>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.831353983Z"}
+{"message":"\tfrom /usr/local/bin/bundle:25:in 'Kernel#load'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.831360596Z"}
+{"message":"\tfrom /usr/local/bin/bundle:25:in '<main>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:32.831366036Z"}
+{"message":"*  Min threads: 3","attributes":{"level":"info"},"timestamp":"2025-11-19T21:21:34.559362834Z"}
+{"message":"*  Max threads: 3","attributes":{"level":"info"},"timestamp":"2025-11-19T21:21:34.559374968Z"}
+{"message":"*  Environment: production","attributes":{"level":"info"},"timestamp":"2025-11-19T21:21:34.559382575Z"}
+{"message":"*          PID: 1","attributes":{"level":"info"},"timestamp":"2025-11-19T21:21:34.559392292Z"}
+{"message":"Puma starting in single mode...","attributes":{"level":"info"},"timestamp":"2025-11-19T21:21:34.559463481Z"}
+{"message":"* Puma version: 7.1.0 (\"Neon Witch\")","attributes":{"level":"info"},"timestamp":"2025-11-19T21:21:34.559475936Z"}
+{"message":"* Ruby version: ruby 3.4.7 (2025-10-08 revision 7a5688e2a2) +PRISM [x86_64-linux]","attributes":{"level":"info"},"timestamp":"2025-11-19T21:21:34.559484068Z"}
+{"message":"/rails/app/services/application_service.rb:3: warning: /usr/local/lib/ruby/3.4.0/ostruct.rb was loaded from the standard library, but will no longer be part of the default gems starting from Ruby 3.5.0.","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:35.796624138Z"}
+{"message":"You can add ostruct to your Gemfile or gemspec to silence this warning.","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:35.796634636Z"}
+{"message":"! Unable to load application: ArgumentError: Missing `secret_key_base` for 'production' environment, set this string with `bin/rails credentials:edit`","attributes":{"level":"info"},"timestamp":"2025-11-19T21:21:36.438296784Z"}
+{"message":"bundler: failed to load command: puma (/usr/local/bundle/ruby/3.4.0/bin/puma)","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438301114Z"}
+{"message":"/usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/application/configuration.rb:521:in 'Rails::Application::Configuration#secret_key_base=': Missing `secret_key_base` for 'production' environment, set this string with `bin/rails credentials:edit` (ArgumentError)","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438306168Z"}
+{"message":"","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438311531Z"}
+{"message":"          raise ArgumentError, \"Missing `secret_key_base` for '#{Rails.env}' environment, set this string with `bin/rails credentials:edit`\"","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438317146Z"}
+{"message":"                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438321069Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/application/configuration.rb:503:in 'Rails::Application::Configuration#secret_key_base'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438325221Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/application.rb:473:in 'Rails::Application#secret_key_base'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438329399Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/application.rb:205:in 'block in Rails::Application#message_verifiers'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438334023Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/message_verifiers.rb:134:in 'ActiveSupport::MessageVerifiers#build'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438339350Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/messages/rotation_coordinator.rb:85:in 'block in ActiveSupport::Messages::RotationCoordinator#build_with_rotations'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438344787Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/messages/rotation_coordinator.rb:85:in 'Array#map'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.438350609Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/messages/rotation_coordinator.rb:85:in 'ActiveSupport::Messages::RotationCoordinator#build_with_rotations'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441086191Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/messages/rotation_coordinator.rb:19:in 'ActiveSupport::Messages::RotationCoordinator#[]'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441097861Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/application.rb:232:in 'Rails::Application#message_verifier'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441106944Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activerecord-7.2.3/lib/active_record/railtie.rb:355:in 'block (3 levels) in <class:Railtie>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441114607Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:97:in 'Module#class_eval'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441122531Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:97:in 'block in ActiveSupport::LazyLoadHooks#execute_hook'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441130743Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:87:in 'ActiveSupport::LazyLoadHooks#with_execution_control'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441138596Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:92:in 'ActiveSupport::LazyLoadHooks#execute_hook'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441145787Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:62:in 'block in ActiveSupport::LazyLoadHooks#on_load'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441152097Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:61:in 'Array#each'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441157726Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:61:in 'ActiveSupport::LazyLoadHooks#on_load'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.441163616Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activerecord-7.2.3/lib/active_record/railtie.rb:354:in 'block (2 levels) in <class:Railtie>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444456938Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:94:in 'block in ActiveSupport::LazyLoadHooks#execute_hook'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444466241Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:87:in 'ActiveSupport::LazyLoadHooks#with_execution_control'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444472475Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:92:in 'ActiveSupport::LazyLoadHooks#execute_hook'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444478882Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:78:in 'block in ActiveSupport::LazyLoadHooks#run_load_hooks'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444483979Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:77:in 'Array#each'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444491341Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/activesupport-7.2.3/lib/active_support/lazy_load_hooks.rb:77:in 'ActiveSupport::LazyLoadHooks#run_load_hooks'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444499781Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/application/finisher.rb:94:in 'block in <module:Finisher>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444505397Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/initializable.rb:32:in 'BasicObject#instance_exec'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444511724Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/initializable.rb:32:in 'Rails::Initializable::Initializer#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444517526Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/initializable.rb:61:in 'block in Rails::Initializable#run_initializers'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444523583Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:231:in 'block in TSort.tsort_each'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.444529974Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:353:in 'block (2 levels) in TSort.each_strongly_connected_component'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447184083Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:434:in 'TSort.each_strongly_connected_component_from'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447191439Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:352:in 'block in TSort.each_strongly_connected_component'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447199470Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:350:in 'Rails::Initializable::Collection#each'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447206345Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:350:in 'Method#call'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447214594Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:350:in 'TSort.each_strongly_connected_component'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447221864Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:229:in 'TSort.tsort_each'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447229295Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/tsort-0.2.0/lib/tsort.rb:208:in 'TSort#tsort_each'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447236356Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/initializable.rb:60:in 'Rails::Initializable#run_initializers'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447242380Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/railties-7.2.3/lib/rails/application.rb:435:in 'Rails::Application#initialize!'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447247590Z"}
+{"message":"\tfrom /rails/config/environment.rb:5:in '<top (required)>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447253467Z"}
+{"message":"\tfrom config.ru:3:in 'Kernel#require_relative'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447258761Z"}
+{"message":"\tfrom config.ru:3:in 'block (2 levels) in <top (required)>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447265612Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/rack-3.2.4/lib/rack/builder.rb:108:in 'Kernel#eval'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447272731Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/rack-3.2.4/lib/rack/builder.rb:108:in 'Rack::Builder.new_from_string'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.447277797Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/rack-3.2.4/lib/rack/builder.rb:97:in 'Rack::Builder.load_file'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449382382Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/rack-3.2.4/lib/rack/builder.rb:67:in 'Rack::Builder.parse_file'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449396448Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/configuration.rb:414:in 'Puma::Configuration#load_rackup'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449405395Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/configuration.rb:318:in 'Puma::Configuration#app'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449414784Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/runner.rb:160:in 'Puma::Runner#load_and_bind'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449422810Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/single.rb:44:in 'Puma::Single#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449431835Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/launcher.rb:207:in 'Puma::Launcher#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449439719Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/lib/puma/cli.rb:73:in 'Puma::CLI#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449446676Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/gems/puma-7.1.0/bin/puma:10:in '<top (required)>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449454018Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/bin/puma:25:in 'Kernel#load'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449463032Z"}
+{"message":"\tfrom /usr/local/bundle/ruby/3.4.0/bin/puma:25:in '<top (required)>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449469712Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli/exec.rb:59:in 'Kernel.load'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449477283Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli/exec.rb:59:in 'Bundler::CLI::Exec#kernel_load'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449484028Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli/exec.rb:23:in 'Bundler::CLI::Exec#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449489888Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli.rb:452:in 'Bundler::CLI#exec'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449497983Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/command.rb:28:in 'Bundler::Thor::Command#run'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.449503977Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/friendly_errors.rb:117:in 'Bundler.with_friendly_errors'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.452869537Z"}
+{"message":"\tfrom /usr/local/lib/ruby/gems/3.4.0/gems/bundler-2.6.9/exe/bundle:20:in '<top (required)>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.452884114Z"}
+{"message":"\tfrom /usr/local/bin/bundle:25:in 'Kernel#load'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.452894337Z"}
+{"message":"\tfrom /usr/local/bin/bundle:25:in '<main>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.452903752Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/invocation.rb:127:in 'Bundler::Thor::Invocation#invoke_command'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.452975268Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor.rb:538:in 'Bundler::Thor.dispatch'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.452981927Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli.rb:35:in 'Bundler::CLI.dispatch'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.452987839Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/vendor/thor/lib/thor/base.rb:584:in 'Bundler::Thor::Base::ClassMethods#start'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.452995642Z"}
+{"message":"\tfrom /usr/local/lib/ruby/3.4.0/bundler/cli.rb:29:in 'Bundler::CLI.start'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.453003671Z"}
+{"message":"\tfrom /usr/local/lib/ruby/gems/3.4.0/gems/bundler-2.6.9/exe/bundle:28:in 'block in <top (required)>'","attributes":{"level":"error"},"timestamp":"2025-11-19T21:21:36.453012694Z"}
