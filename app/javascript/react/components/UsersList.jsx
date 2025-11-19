@@ -40,7 +40,7 @@ const UsersList = ({ onCreateUser, onEditUser, onDeleteUser }) => {
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">Developers</h2>
+        <h2 className="text-2xl font-bold text-white">Users</h2>
         {onCreateUser && (
           <button
             onClick={onCreateUser}

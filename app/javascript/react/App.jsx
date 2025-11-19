@@ -234,6 +234,7 @@ const App = () => {
   const [editingUser, setEditingUser] = useState(null);
   const [userToDelete, setUserToDelete] = useState(null);
   const [authView, setAuthView] = useState("login"); // "login" or "register"
+  const [isDesktop, setIsDesktop] = useState(false);
   const projectsListRef = useRef(null);
 
   const clearFeedback = () => setFeedback(null);
@@ -729,6 +730,16 @@ const App = () => {
     }
   };
 
+  // Hook para detectar si es desktop
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 768); // md breakpoint
+    };
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
+
   if (!currentUser) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-black flex items-center justify-center p-4 sm:p-6">
@@ -822,14 +833,15 @@ const App = () => {
                   <button
                     key={sec.id}
                     onClick={() => handleSectionChange(sec.id)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                    className={`flex items-center gap-2 px-3 py-2 sm:px-4 rounded-lg transition-colors ${
                       section === sec.id
                         ? "bg-indigo-600 text-white"
                         : "text-gray-300 hover:bg-gray-800 hover:text-white"
                     }`}
+                    title={sec.label}
                   >
                     {sec.icon}
-                    <span className="font-medium">{sec.label}</span>
+                    {isDesktop && <span className="font-medium">{sec.label}</span>}
                   </button>
                 ))}
               </nav>
@@ -838,9 +850,17 @@ const App = () => {
               type="button"
               onClick={handleLogout}
               disabled={loggingOut}
-              className="rounded-lg bg-gray-800 px-6 py-3 text-base font-medium text-white hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-600 transition-colors whitespace-nowrap min-w-fit"
+              className="flex items-center gap-2 rounded-lg bg-gray-800 px-3 py-2 sm:px-6 sm:py-3 text-base font-medium text-white hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-600 transition-colors whitespace-nowrap min-w-fit"
+              title="Sign out"
             >
-              {loggingOut ? "Signing\u00A0out…" : "Sign\u00A0out"}
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              {isDesktop && (
+                <span>
+                  {loggingOut ? "Signing\u00A0out…" : "Sign\u00A0out"}
+                </span>
+              )}
             </button>
           </div>
         </div>
