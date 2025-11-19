@@ -40,7 +40,8 @@ RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz
     rm -rf /tmp/node-build-master
 
 # Install application gems
-# Copy Gemfile first, then copy engines (core and admin) before bundle install
+# IMPORTANT: Copy engines (core and admin) BEFORE bundle install so Bundler can find them
+# Copy Gemfile and engines together so they're available for bundle install
 COPY Gemfile Gemfile.lock ./
 COPY core ./core
 COPY admin ./admin
