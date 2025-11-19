@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+# Run migrations before starting the server
+echo "Running database migrations..."
+bundle exec rails db:migrate || echo "Migration failed or already up to date"
+
+# Start Puma server
+echo "Starting Puma server..."
+exec bundle exec puma -C config/puma.rb
+

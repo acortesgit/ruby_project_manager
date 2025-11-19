@@ -5,13 +5,4 @@ if [ -z "${LD_PRELOAD+x}" ] && [ -f /usr/lib/*/libjemalloc.so.2 ]; then
   export LD_PRELOAD="$(echo /usr/lib/*/libjemalloc.so.2)"
 fi
 
-# If running puma, then migrate existing database
-# Use db:migrate instead of db:prepare to avoid starting server
-# Check if we're running puma (either directly or via bundle exec)
-if [ "${1}" == "bundle" ] && [ "${2}" == "exec" ] && [ "${3}" == "puma" ]; then
-  ./bin/rails db:migrate || true
-elif [ "${1}" == "puma" ] || [[ "${*}" == *"puma"* ]]; then
-  ./bin/rails db:migrate || true
-fi
-
 exec "${@}"
