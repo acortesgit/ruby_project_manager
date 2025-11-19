@@ -88,6 +88,14 @@ test:
 #
 production:
   <<: *default
-  database: training_app_production
-  username: training_app
-  password: <%= ENV["TRAINING_APP_DATABASE_PASSWORD"] %>
+  # Railway automatically provides DATABASE_URL, Rails will use it automatically
+  # Rails prioritizes DATABASE_URL over individual connection parameters
+  <% if ENV["DATABASE_URL"].present? %>
+  url: <%= ENV["DATABASE_URL"] %>
+  <% else %>
+  database: <%= ENV.fetch("DATABASE_NAME", "training_app_production") %>
+  username: <%= ENV.fetch("DATABASE_USERNAME", "training_app") %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD", "") %>
+  host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
+  port: <%= ENV.fetch("DATABASE_PORT", 5432) %>
+  <% end %>
