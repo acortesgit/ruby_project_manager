@@ -22,7 +22,11 @@ Rails.application.configure do
 
   # Use SECRET_KEY_BASE from environment variable (Railway provides this)
   # If SECRET_KEY_BASE is not set, Rails will try to read it from credentials
-  config.secret_key_base = ENV["SECRET_KEY_BASE"] || Rails.application.credentials.secret_key_base
+  # During build, a dummy value can be used (it's not used in runtime)
+  # Rails requires at least 32 characters for secret_key_base
+  config.secret_key_base = ENV["SECRET_KEY_BASE"] || 
+    (Rails.application.credentials.secret_key_base rescue nil) ||
+    "dummy_key_for_asset_precompilation_only_do_not_use_in_production_#{Rails.env}"
 
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
   # config.public_file_server.enabled = false
