@@ -10,6 +10,8 @@ class ActivityLoggerJob < ApplicationJob
   # @param user_id [Integer] The ID of the user who performed the action
   # @param metadata [Hash] Additional metadata about the activity (default: {})
   def perform(record_type:, record_id:, action:, user_id:, metadata: {})
+    Rails.logger.info("ActivityLoggerJob: Starting - Record: #{record_type}##{record_id}, Action: #{action}, User: #{user_id}")
+    
     # Find the record
     record_class = record_type.constantize
     record = record_class.find_by(id: record_id)

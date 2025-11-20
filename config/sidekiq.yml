@@ -1,7 +1,12 @@
 ---
 :concurrency: <%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5).to_i %>
 :queues:
+  - training_app_production_default
+  - training_app_production_mailers
+  - training_app_production_low_priority
   - default
   - mailers
   - low_priority
+:verbose: true
+:logfile: false  # Use STDOUT instead of logfile
 

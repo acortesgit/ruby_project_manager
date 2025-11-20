@@ -26,13 +26,20 @@ module Core
 
       if task.save
         # Enqueue ActivityLoggerJob to log the creation asynchronously
-        ActivityLoggerJob.perform_later(
-          record_type: task.class.name,
-          record_id: task.id,
-          action: "created",
-          user_id: user.id,
-          metadata: { assignee_id: assignee&.id, assignee_type: assignee&.class&.name }
-        )
+        Rails.logger.info("TaskCreator: Enqueuing ActivityLoggerJob for task##{task.id}")
+        begin
+          job = ActivityLoggerJob.perform_later(
+            record_type: task.class.name,
+            record_id: task.id,
+            action: "created",
+            user_id: user.id,
+            metadata: { assignee_id: assignee&.id, assignee_type: assignee&.class&.name }
+          )
+          Rails.logger.info("TaskCreator: ActivityLoggerJob enqueued successfully")
+        rescue => e
+          Rails.logger.error("TaskCreator: Error enqueuing ActivityLoggerJob: #{e.message}")
+          Rails.logger.error(e.backtrace.join("\n"))
+        end
 
         # Notify assignee if task is assigned
         if assignee
