@@ -1,14 +1,15 @@
 # Service to create a new task with validations
 module Core
   class TaskCreator < Core::ApplicationService
-    attr_reader :project, :title, :description, :assignee
+    attr_reader :project, :title, :description, :assignee, :user
 
-    def initialize(project:, title:, description: nil, assignee: nil)
+    def initialize(project:, title:, description: nil, assignee: nil, user: nil)
       super()
       @project = project
       @title = title
       @description = description
       @assignee = assignee
+      @user = user || project.user # Fallback to project owner if user not provided
     end
 
     def call
@@ -24,10 +25,6 @@ module Core
       )
 
       if task.save
-        # Get user from project owner or current context
-        # For now, use project.user as the actor
-        user = project.user
-
         # Enqueue ActivityLoggerJob to log the creation asynchronously
         ActivityLoggerJob.perform_later(
           record_type: task.class.name,
@@ -45,6 +42,16 @@ module Core
             message: "You've been assigned to task: #{task.title} in project #{project.name}",
             notifiable: task
           )
+
+          # Notify admin who assigned the task (if different from assignee)
+          if user.id != assignee.id
+            NotificationJob.perform_later(
+              user_id: user.id,
+              notification_type: "task_assigned_by_you",
+              message: "You assigned task '#{task.title}' to #{assignee.full_name || assignee.email} in project '#{project.name}'",
+              notifiable: task
+            )
+          end
         end
 
         success(task)

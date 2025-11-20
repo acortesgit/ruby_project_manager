@@ -31,7 +31,8 @@ module Mutations
         project: project,
         title: title,
         description: description,
-        assignee: assignee
+        assignee: assignee,
+        user: current_user
       )
 
       if result.success?

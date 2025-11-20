@@ -61,16 +61,49 @@ module Mutations
             message: "You've been assigned to task: #{task.title} in project #{task.project.name}",
             notifiable: task
           )
+
+          # Notify admin who assigned the task (if different from assignee)
+          if current_user.id != task.assignee.id
+            NotificationJob.perform_later(
+              user_id: current_user.id,
+              notification_type: "task_assigned_by_you",
+              message: "You assigned task '#{task.title}' to #{task.assignee.full_name || task.assignee.email} in project '#{task.project.name}'",
+              notifiable: task
+            )
+          end
         end
 
         # Notify if task status changed to completed
-        if status == "completed" && task.assignee && task.assignee.id != current_user.id
-          NotificationJob.perform_later(
-            user_id: task.assignee.id,
-            notification_type: "task_completed",
-            message: "Task '#{task.title}' has been marked as completed",
-            notifiable: task
-          )
+        if status == "completed"
+          # Notify assignee if different from current user
+          if task.assignee && task.assignee.id != current_user.id
+            NotificationJob.perform_later(
+              user_id: task.assignee.id,
+              notification_type: "task_completed",
+              message: "Task '#{task.title}' has been marked as completed",
+              notifiable: task
+            )
+          end
+
+          # Notify project owner if different from current user and assignee
+          if task.project.user && task.project.user.id != current_user.id && task.project.user.id != task.assignee&.id
+            NotificationJob.perform_later(
+              user_id: task.project.user.id,
+              notification_type: "task_completed_project_owner",
+              message: "Task '#{task.title}' in your project '#{task.project.name}' has been completed.",
+              notifiable: task
+            )
+          end
+
+          # Notify admin who completed the task (if different from assignee and project owner)
+          if current_user.id != task.assignee&.id && current_user.id != task.project.user_id
+            NotificationJob.perform_later(
+              user_id: current_user.id,
+              notification_type: "task_completed_by_you",
+              message: "You marked task '#{task.title}' as completed in project '#{task.project.name}'",
+              notifiable: task
+            )
+          end
         end
 
         { task: task, errors: [] }
