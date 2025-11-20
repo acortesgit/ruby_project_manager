@@ -18,9 +18,18 @@ class TrainingAppSchema < GraphQL::Schema
 
   # Union and Interface Resolution
   def self.resolve_type(abstract_type, obj, ctx)
-    # TODO: Implement this method
-    # to return the correct GraphQL object type for `obj`
-    raise(GraphQL::RequiredImplementationMissingError)
+    case obj
+    when Core::Task
+      Types::TaskType
+    when Core::Project
+      Types::ProjectType
+    when User
+      Types::UserType
+    when Notification
+      Types::NotificationType
+    else
+      raise(GraphQL::RequiredImplementationMissingError, "Unexpected object: #{obj.class}")
+    end
   end
 
   # Limit the size of incoming queries:

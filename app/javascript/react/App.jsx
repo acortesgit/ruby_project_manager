@@ -832,7 +832,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-900">
       <header className="w-full bg-gray-900 border-b border-gray-700">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="w-full px-6 sm:px-8 lg:px-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 py-8 sm:py-10">
             <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
               <h1 className="text-3xl font-bold text-white">DevHub</h1>
@@ -875,7 +875,7 @@ const App = () => {
       </header>
 
       <div className="w-full">
-        <div className="w-full p-6 px-8 space-y-6 max-w-6xl mx-auto">
+        <div className="w-full p-6 px-8 space-y-6 max-w-7xl mx-auto">
 
         {view === "projects" && (
           <ProjectsList

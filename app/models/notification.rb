@@ -12,8 +12,8 @@ class Notification < ApplicationRecord
   scope :unread, -> { where(read: false) }
   scope :read, -> { where(read: true) }
   scope :recent, -> { order(created_at: :desc) }
-  scope :for_user, ->(user) { where(user: user) if user }
-  scope :by_type, ->(notification_type) { where(notification_type: notification_type) if notification_type }
+  scope :for_user, ->(user) { user ? where(user: user) : none }
+  scope :by_type, ->(notification_type) { notification_type ? where(notification_type: notification_type) : all }
 
   # Instance methods
   def mark_as_read!

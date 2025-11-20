@@ -135,8 +135,11 @@ module Types
       return [] unless current_user
 
       notifications = Notification.for_user(current_user)
+      Rails.logger.debug("Notifications query - User ID: #{current_user.id}, Total notifications: #{notifications.count}")
       notifications = notifications.unread if unread_only
-      notifications.recent
+      result = notifications.recent
+      Rails.logger.debug("Notifications query - Filtered count: #{result.count}")
+      result
     end
 
     field :notification, Types::NotificationType, null: true,
