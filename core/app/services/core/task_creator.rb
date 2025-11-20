@@ -36,21 +36,25 @@ module Core
 
         # Notify assignee if task is assigned
         if assignee
-          NotificationJob.perform_later(
+          Rails.logger.info("TaskCreator: Enqueuing notification for assignee User##{assignee.id}")
+          job = NotificationJob.perform_later(
             user_id: assignee.id,
             notification_type: "task_assigned",
             message: "You've been assigned to task: #{task.title} in project #{project.name}",
             notifiable: task
           )
+          Rails.logger.info("TaskCreator: NotificationJob enqueued with job_id: #{job.job_id rescue 'N/A'}")
 
           # Notify admin who assigned the task (if different from assignee)
           if user.id != assignee.id
-            NotificationJob.perform_later(
+            Rails.logger.info("TaskCreator: Enqueuing notification for admin User##{user.id}")
+            job = NotificationJob.perform_later(
               user_id: user.id,
               notification_type: "task_assigned_by_you",
               message: "You assigned task '#{task.title}' to #{assignee.full_name || assignee.email} in project '#{project.name}'",
               notifiable: task
             )
+            Rails.logger.info("TaskCreator: NotificationJob enqueued with job_id: #{job.job_id rescue 'N/A'}")
           end
         end
 

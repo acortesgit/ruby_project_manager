@@ -9,6 +9,8 @@ class NotificationJob < ApplicationJob
   # @param message [String] The notification message
   # @param notifiable [Object] Optional polymorphic object (e.g., Task, Project)
   def perform(user_id:, notification_type:, message:, notifiable: nil)
+    Rails.logger.info("NotificationJob: Starting - User##{user_id}, Type: #{notification_type}")
+    
     # Find the user
     user = User.find_by(id: user_id)
     unless user
@@ -17,14 +19,14 @@ class NotificationJob < ApplicationJob
     end
 
     # Create the notification
-    Notification.create!(
+    notification = Notification.create!(
       user: user,
       notification_type: notification_type,
       message: message,
       notifiable: notifiable
     )
 
-    Rails.logger.info("NotificationJob: Created notification for User##{user_id} - type: #{notification_type}")
+    Rails.logger.info("NotificationJob: Successfully created notification ID##{notification.id} for User##{user_id} - type: #{notification_type}")
   rescue StandardError => e
     # Log errors but don't fail the job
     Rails.logger.error("NotificationJob error: #{e.message}")

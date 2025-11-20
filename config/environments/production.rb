@@ -79,7 +79,13 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   # Use Sidekiq for background jobs in production
-  config.active_job.queue_adapter = :sidekiq
+  # Fallback to async if Sidekiq/Redis is not available
+  if ENV["REDIS_URL"].present?
+    config.active_job.queue_adapter = :sidekiq
+  else
+    Rails.logger.warn("REDIS_URL not set, using async adapter for background jobs")
+    config.active_job.queue_adapter = :async
+  end
   config.active_job.queue_name_prefix = "training_app_production"
 
   # Disable caching for Action Mailer templates even if Action Controller
