@@ -19,7 +19,7 @@ gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 gem "graphql", "~> 2.3"
-gem "authlogic", "~> 6.4"
+gem "authlogic", "~> 6.6"
 gem "redis", "~> 5.2"
 gem "sidekiq", "~> 7.3"
 # Use Redis adapter to run Action Cable in production
