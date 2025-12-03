@@ -21,7 +21,7 @@ gem "jbuilder"
 gem "graphql", "~> 2.3"
 gem "authlogic", "~> 6.4"
 gem "redis", "~> 5.2"
-gem "sidekiq", "~> 7.3"
+gem "sidekiq", "~> 8.0"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
