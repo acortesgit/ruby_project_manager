@@ -18,7 +18,7 @@ gem "stimulus-rails"
 gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
-gem "graphql", "~> 2.3"
+gem "graphql", "~> 2.5"
 gem "authlogic", "~> 6.4"
 gem "redis", "~> 5.2"
 gem "sidekiq", "~> 7.3"
